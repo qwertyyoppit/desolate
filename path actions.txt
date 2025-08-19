@@ -20,3 +20,58 @@ descend in building
 descend outside
 
 ascend in build
+
+__________________________________
+
+directions:
+left
+right
+straight
+down
+up
+
+actions:
+descend
+ascend
+enter building
+exit building
+
+lengths:
+narrow / wide
+short / long
+
+short + thin = small
+short + wide = far (entrance should probably not be centered)
+long + wide = big
+long + thin = narrow
+
+outside/building
+
+No Repeats
+
+possible direction: 
+remove previous
+if previous is left or right: remove left and right
+if previous is down or up: remove down and up
+if outside: remove down
+
+possible actions:
+remove previous
+if in building: remove enter building
+if outside: remove exit building
+if up: remove descend
+if down: remove ascend
+
+possible lengths:
+remove either previous randomly
+
+
+
+
+
+
+
+nodes
+2 types: allows (a room's exit) and expects (a room's entrance)
+3 node slots each side (left / center / right)
+door / open
