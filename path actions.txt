@@ -1,0 +1,22 @@
+short straight
+longer straight
+
+turn left
+turn left longer
+turn right
+turn right longer
+
+enter small building
+enter long building
+enter larger building
+
+continue building small/large
+door outside
+
+exit small/large building
+
+descend in building
+
+descend outside
+
+ascend in build
