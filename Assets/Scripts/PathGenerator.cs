@@ -9,6 +9,11 @@ public class PathGenerator : MonoBehaviour
 
     public bool drawPathGizmo;
 
+    private void Awake()
+    {
+        GeneratePath();
+    }
+
     public void GeneratePath()
     {
         pathSegments.Clear();
@@ -101,7 +106,35 @@ public class PathGenerator : MonoBehaviour
             {
                 Gizmos.color = Color.red;
             }
-
+            if (segment.direction == PathDirections.Straight)
+            {
+                currentPoint = Vector3.forward;
+            }
+            if (segment.direction == PathDirections.Left)
+            {
+                currentPoint = Vector3.left;
+            }
+            if (segment.direction == PathDirections.Right)
+            {
+                currentPoint = Vector3.right;
+            }
+            if (segment.direction == PathDirections.Up)
+            {
+                currentPoint = Vector3.up;
+            }
+            if (segment.direction == PathDirections.Down)
+            {
+                currentPoint = Vector3.down;
+            }
+            if (segment.action == PathActions.Descend)
+            {
+                currentPoint += new Vector3(0, -0.5f, 0);
+            }
+            else if (segment.action == PathActions.Ascend)
+            {
+                currentPoint += new Vector3(0, 0.5f, 0);
+            }
+            
             previousPoint = currentPoint;
         }
     }
@@ -145,4 +178,5 @@ public enum PathWidths
 {
     Thin,
     Wide
+
 }
