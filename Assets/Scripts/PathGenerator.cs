@@ -7,6 +7,10 @@ public class PathGenerator : MonoBehaviour
     [SerializeField] private int maxConsecutiveOutdoors = 8;
     [SerializeField] private int maxConsecutiveIndoors = 6;
 
+    [SerializeField, Range(0f, 1f)] private float chanceOfAction = 0.2f;
+
+    [SerializeField, Range(0f, 1f)] private float chanceOfNoneDirectionOnElevationChange = 0.5f;
+
     private List<PathSegment> pathSegments = new();
 
     public bool drawPathGizmo;
@@ -20,15 +24,16 @@ public class PathGenerator : MonoBehaviour
     {
         pathSegments.Clear();
 
-        var cycleRemaining = 0;
+        var cycle = Random.Range(1, maxConsecutiveOutdoors);
         for (var i = 0; i < segmentAmount; i++)
         {
             var currentSegment = new PathSegment();
             pathSegments.Add(currentSegment);
             var validDirections = new List<PathDirections>
-                { PathDirections.Straight, PathDirections.Left, PathDirections.Right };//, PathDirections.Up, PathDirections.Down };
+                { PathDirections.Straight, PathDirections.Left, PathDirections.Right };
 
-            var validActions = new List<PathActions> { PathActions.Ascend, PathActions.Descend, PathActions.EnterBuilding, PathActions.ExitBuilding };
+            var validElevationActions = new List<PathElevationActions> { PathElevationActions.Ascend, PathElevationActions.Descend };
+            var validBuildingActions = new List<PathBuildingActions> { PathBuildingActions.EnterBuilding, PathBuildingActions.ExitBuilding };
 
             var validLengths = new List<PathLengths> { PathLengths.Short, PathLengths.Long };
             var validWidths = new List<PathWidths> { PathWidths.Thin, PathWidths.Wide };
@@ -36,33 +41,27 @@ public class PathGenerator : MonoBehaviour
             var previousSegment = i > 0 ? pathSegments[i - 1] : null;
             if (previousSegment != null)
             {
-                validActions.Remove(previousSegment.Action);
-
                 switch (previousSegment.Direction)
                 {
                     case PathDirections.Left or PathDirections.Right:
                         validDirections.Remove(PathDirections.Left);
                         validDirections.Remove(PathDirections.Right);
                         break;
-                    case PathDirections.Up or PathDirections.Down:
-                        validDirections.Remove(PathDirections.Up);
-                        validDirections.Remove(PathDirections.Down);
-                        break;
                 }
 
-                if (previousSegment.Action is PathActions.Ascend or PathActions.Descend)
+                if (previousSegment.ElevationAction is PathElevationActions.Ascend or PathElevationActions.Descend)
                 {
-                    validActions.Remove(PathActions.Ascend);
-                    validActions.Remove(PathActions.Descend);
+                    validElevationActions.Remove(PathElevationActions.Ascend);
+                    validElevationActions.Remove(PathElevationActions.Descend);
                 }
                 if (previousSegment.Indoors)
                 {
-                    validActions.Remove(PathActions.EnterBuilding);
+                    validBuildingActions.Remove(PathBuildingActions.EnterBuilding);
                     currentSegment.Indoors = true;
                 }
                 else
                 {
-                    validActions.Remove(PathActions.ExitBuilding);
+                    validBuildingActions.Remove(PathBuildingActions.ExitBuilding);
                 }
                 if (Random.value > 0.5f)
                 {
@@ -73,16 +72,23 @@ public class PathGenerator : MonoBehaviour
                     validWidths.Remove(previousSegment.Width);
                 }
             }
-            currentSegment.Direction = validDirections[Random.Range(0, validDirections.Count)];
-            currentSegment.Action = Random.value < 0.8f ? PathActions.None : validActions[Random.Range(0, validActions.Count)];
+            if (cycle <= 0)
+            {
+                currentSegment.BuildingAction = previousSegment.Indoors ? PathBuildingActions.ExitBuilding : PathBuildingActions.EnterBuilding;
+                cycle = Random.Range(1, previousSegment.Indoors ? maxConsecutiveOutdoors : maxConsecutiveIndoors);
+            }
+            currentSegment.ElevationAction = Random.value > chanceOfAction || validElevationActions.Count <= 0 ? PathElevationActions.None : validElevationActions[Random.Range(0, validElevationActions.Count)];
+            currentSegment.Direction = Random.value > chanceOfNoneDirectionOnElevationChange && currentSegment.ElevationAction != PathElevationActions.None 
+                ? PathDirections.None : validDirections[Random.Range(0, validDirections.Count)];
             currentSegment.Length = validLengths[Random.Range(0, validLengths.Count)];
             currentSegment.Width = validWidths[Random.Range(0, validWidths.Count)];
-            currentSegment.Indoors = currentSegment.Action switch
+            currentSegment.Indoors = currentSegment.BuildingAction switch
             {
-                PathActions.EnterBuilding => true,
-                PathActions.ExitBuilding => false,
+                PathBuildingActions.EnterBuilding => true,
+                PathBuildingActions.ExitBuilding => false,
                 _ => currentSegment.Indoors
             };
+            cycle--;
         }
     }
 
@@ -90,7 +96,7 @@ public class PathGenerator : MonoBehaviour
     {
         foreach (var segment in pathSegments)
         {
-            Debug.Log($"{segment.Direction}, {segment.Action}, {segment.Length}, {segment.Width}, {segment.Indoors}");
+            Debug.Log($"{segment.Direction}, {segment.ElevationAction}, {segment.BuildingAction}, {segment.Length}, {segment.Width}, {segment.Indoors}");
         }
     }
 
@@ -112,11 +118,10 @@ public class PathGenerator : MonoBehaviour
 
             currentPoint = segment.Direction switch
             {
+                PathDirections.None => Vector3.zero,
                 PathDirections.Straight => Vector3.forward,
                 PathDirections.Left => Vector3.left,
                 PathDirections.Right => Vector3.right,
-                PathDirections.Up => Vector3.up,
-                PathDirections.Down => Vector3.down,
                 _ => currentPoint
             };
             if (segment.Length == PathLengths.Long)
@@ -129,12 +134,12 @@ public class PathGenerator : MonoBehaviour
                 currentPoint.x *= 2f;
             }
             
-            switch (segment.Action)
+            switch (segment.ElevationAction)
             {
-                case PathActions.Descend:
+                case PathElevationActions.Descend:
                     currentPoint += new Vector3(0, -1f, 0);
                     break;
-                case PathActions.Ascend:
+                case PathElevationActions.Ascend:
                     currentPoint += new Vector3(0, 1f, 0);
                     break;
             }
@@ -149,7 +154,8 @@ public class PathGenerator : MonoBehaviour
 public class PathSegment
 {
     public PathDirections Direction;
-    public PathActions Action;
+    public PathElevationActions ElevationAction;
+    public PathBuildingActions BuildingAction;
     public PathLengths Length;
     public PathWidths Width;
 
@@ -158,18 +164,22 @@ public class PathSegment
 
 public enum PathDirections
 {
+    None,
     Straight,
     Left,
-    Right,
-    Up,
-    Down
+    Right
 }
 
-public enum PathActions
+public enum PathElevationActions
 {
     None,
     Ascend,
-    Descend,
+    Descend
+}
+
+public enum PathBuildingActions
+{
+    None,
     EnterBuilding,
     ExitBuilding
 }
