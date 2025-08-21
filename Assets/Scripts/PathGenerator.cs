@@ -4,6 +4,8 @@ using UnityEngine;
 public class PathGenerator : MonoBehaviour
 {
     [SerializeField] private int segmentAmount = 15;
+    [SerializeField] private int maxConsecutiveOutdoors = 8;
+    [SerializeField] private int maxConsecutiveIndoors = 6;
 
     private List<PathSegment> pathSegments = new();
 
@@ -18,37 +20,45 @@ public class PathGenerator : MonoBehaviour
     {
         pathSegments.Clear();
 
+        var cycleRemaining = 0;
         for (var i = 0; i < segmentAmount; i++)
         {
             var currentSegment = new PathSegment();
             pathSegments.Add(currentSegment);
-            var validDirections = new List<PathDirections>() { PathDirections.Straight, PathDirections.Left, PathDirections.Right, PathDirections.Up, PathDirections.Down };
+            var validDirections = new List<PathDirections>
+                { PathDirections.Straight, PathDirections.Left, PathDirections.Right };//, PathDirections.Up, PathDirections.Down };
 
-            var validActions = new List<PathActions>() { PathActions.Ascend, PathActions.Descend, PathActions.EnterBuilding, PathActions.ExitBuilding };
+            var validActions = new List<PathActions> { PathActions.Ascend, PathActions.Descend, PathActions.EnterBuilding, PathActions.ExitBuilding };
 
             var validLengths = new List<PathLengths> { PathLengths.Short, PathLengths.Long };
             var validWidths = new List<PathWidths> { PathWidths.Thin, PathWidths.Wide };
 
-            var previousSegment = pathSegments[i - 1];
+            var previousSegment = i > 0 ? pathSegments[i - 1] : null;
             if (previousSegment != null)
             {
-                validDirections.Remove(previousSegment.direction);
-                validActions.Remove(previousSegment.action);
+                validActions.Remove(previousSegment.Action);
 
-                if (previousSegment.direction == PathDirections.Left || previousSegment.direction == PathDirections.Right)
+                switch (previousSegment.Direction)
                 {
-                    validDirections.Remove(PathDirections.Left);
-                    validDirections.Remove(PathDirections.Right);
+                    case PathDirections.Left or PathDirections.Right:
+                        validDirections.Remove(PathDirections.Left);
+                        validDirections.Remove(PathDirections.Right);
+                        break;
+                    case PathDirections.Up or PathDirections.Down:
+                        validDirections.Remove(PathDirections.Up);
+                        validDirections.Remove(PathDirections.Down);
+                        break;
                 }
-                if (previousSegment.action == PathActions.Ascend || previousSegment.action == PathActions.Descend)
+
+                if (previousSegment.Action is PathActions.Ascend or PathActions.Descend)
                 {
                     validActions.Remove(PathActions.Ascend);
                     validActions.Remove(PathActions.Descend);
                 }
-                if (previousSegment.is_indoors)
+                if (previousSegment.Indoors)
                 {
                     validActions.Remove(PathActions.EnterBuilding);
-                    currentSegment.is_indoors = true;
+                    currentSegment.Indoors = true;
                 }
                 else
                 {
@@ -56,23 +66,23 @@ public class PathGenerator : MonoBehaviour
                 }
                 if (Random.value > 0.5f)
                 {
-                    validLengths.Remove(previousSegment.length);
+                    validLengths.Remove(previousSegment.Length);
                 }
                 else
                 {
-                    validWidths.Remove(previousSegment.width);
+                    validWidths.Remove(previousSegment.Width);
                 }
             }
-            currentSegment.direction = validDirections[Random.Range(0, validDirections.Count)];
-            currentSegment.action = Random.value > 0.8f ? PathActions.None : validActions[Random.Range(0, validActions.Count)];
-            if (currentSegment.action == PathActions.EnterBuilding)
+            currentSegment.Direction = validDirections[Random.Range(0, validDirections.Count)];
+            currentSegment.Action = Random.value < 0.8f ? PathActions.None : validActions[Random.Range(0, validActions.Count)];
+            currentSegment.Length = validLengths[Random.Range(0, validLengths.Count)];
+            currentSegment.Width = validWidths[Random.Range(0, validWidths.Count)];
+            currentSegment.Indoors = currentSegment.Action switch
             {
-                currentSegment.is_indoors = true;
-            }
-            else if (currentSegment.action == PathActions.ExitBuilding)
-            {
-                currentSegment.is_indoors = false;
-            }
+                PathActions.EnterBuilding => true,
+                PathActions.ExitBuilding => false,
+                _ => currentSegment.Indoors
+            };
         }
     }
 
@@ -80,7 +90,7 @@ public class PathGenerator : MonoBehaviour
     {
         foreach (var segment in pathSegments)
         {
-            Debug.Log($"{segment.direction}, {segment.action}, {segment.length}, {segment.width}, {segment.is_indoors}");
+            Debug.Log($"{segment.Direction}, {segment.Action}, {segment.Length}, {segment.Width}, {segment.Indoors}");
         }
     }
 
@@ -98,43 +108,39 @@ public class PathGenerator : MonoBehaviour
         var previousPoint = Vector3.zero;
         foreach (var segment in pathSegments)
         {
-            if (segment.is_indoors)
+            Gizmos.color = segment.Indoors ? Color.blue : Color.red;
+
+            currentPoint = segment.Direction switch
             {
-                Gizmos.color = Color.blue;
+                PathDirections.Straight => Vector3.forward,
+                PathDirections.Left => Vector3.left,
+                PathDirections.Right => Vector3.right,
+                PathDirections.Up => Vector3.up,
+                PathDirections.Down => Vector3.down,
+                _ => currentPoint
+            };
+            if (segment.Length == PathLengths.Long)
+            {
+                currentPoint.z *= 2f;
             }
-            else
+
+            if (segment.Width == PathWidths.Wide)
             {
-                Gizmos.color = Color.red;
-            }
-            if (segment.direction == PathDirections.Straight)
-            {
-                currentPoint = Vector3.forward;
-            }
-            if (segment.direction == PathDirections.Left)
-            {
-                currentPoint = Vector3.left;
-            }
-            if (segment.direction == PathDirections.Right)
-            {
-                currentPoint = Vector3.right;
-            }
-            if (segment.direction == PathDirections.Up)
-            {
-                currentPoint = Vector3.up;
-            }
-            if (segment.direction == PathDirections.Down)
-            {
-                currentPoint = Vector3.down;
-            }
-            if (segment.action == PathActions.Descend)
-            {
-                currentPoint += new Vector3(0, -0.5f, 0);
-            }
-            else if (segment.action == PathActions.Ascend)
-            {
-                currentPoint += new Vector3(0, 0.5f, 0);
+                currentPoint.x *= 2f;
             }
             
+            switch (segment.Action)
+            {
+                case PathActions.Descend:
+                    currentPoint += new Vector3(0, -1f, 0);
+                    break;
+                case PathActions.Ascend:
+                    currentPoint += new Vector3(0, 1f, 0);
+                    break;
+            }
+
+            currentPoint += previousPoint;
+            Gizmos.DrawLine(previousPoint, currentPoint);
             previousPoint = currentPoint;
         }
     }
@@ -142,12 +148,12 @@ public class PathGenerator : MonoBehaviour
 
 public class PathSegment
 {
-    public PathDirections direction;
-    public PathActions action;
-    public PathLengths length;
-    public PathWidths width;
+    public PathDirections Direction;
+    public PathActions Action;
+    public PathLengths Length;
+    public PathWidths Width;
 
-    public bool is_indoors;
+    public bool Indoors;
 }
 
 public enum PathDirections
