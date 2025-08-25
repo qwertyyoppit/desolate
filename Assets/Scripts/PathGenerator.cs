@@ -11,7 +11,7 @@ public class PathGenerator : MonoBehaviour
 
     [SerializeField, Range(0f, 1f)] private float chanceOfNoneDirectionOnElevationChange = 0.5f;
 
-    private List<PathSegment> pathSegments = new();
+    public static readonly List<PathSegment> PathSegments = new();
 
     public bool drawPathGizmo;
 
@@ -22,30 +22,29 @@ public class PathGenerator : MonoBehaviour
 
     public void GeneratePath()
     {
-        pathSegments.Clear();
+        PathSegments.Clear();
 
         var cycle = Random.Range(1, maxConsecutiveOutdoors);
         for (var i = 0; i < segmentAmount; i++)
         {
             var currentSegment = new PathSegment();
-            pathSegments.Add(currentSegment);
-            var validDirections = new List<PathDirections>
-                { PathDirections.Straight, PathDirections.Left, PathDirections.Right };
+            PathSegments.Add(currentSegment);
+            var validDirections = new List<PathDirection>
+                { PathDirection.Straight, PathDirection.Left, PathDirection.Right };
 
             var validElevationActions = new List<PathElevationActions> { PathElevationActions.Ascend, PathElevationActions.Descend };
-            var validBuildingActions = new List<PathBuildingActions> { PathBuildingActions.EnterBuilding, PathBuildingActions.ExitBuilding };
 
             var validLengths = new List<PathLengths> { PathLengths.Short, PathLengths.Long };
             var validWidths = new List<PathWidths> { PathWidths.Thin, PathWidths.Wide };
 
-            var previousSegment = i > 0 ? pathSegments[i - 1] : null;
+            var previousSegment = i > 0 ? PathSegments[i - 1] : null;
             if (previousSegment != null)
             {
                 switch (previousSegment.Direction)
                 {
-                    case PathDirections.Left or PathDirections.Right:
-                        validDirections.Remove(PathDirections.Left);
-                        validDirections.Remove(PathDirections.Right);
+                    case PathDirection.Left or PathDirection.Right:
+                        validDirections.Remove(PathDirection.Left);
+                        validDirections.Remove(PathDirection.Right);
                         break;
                 }
 
@@ -56,12 +55,7 @@ public class PathGenerator : MonoBehaviour
                 }
                 if (previousSegment.Indoors)
                 {
-                    validBuildingActions.Remove(PathBuildingActions.EnterBuilding);
                     currentSegment.Indoors = true;
-                }
-                else
-                {
-                    validBuildingActions.Remove(PathBuildingActions.ExitBuilding);
                 }
                 if (Random.value > 0.5f)
                 {
@@ -71,15 +65,15 @@ public class PathGenerator : MonoBehaviour
                 {
                     validWidths.Remove(previousSegment.Width);
                 }
-            }
-            if (cycle <= 0)
-            {
-                currentSegment.BuildingAction = previousSegment.Indoors ? PathBuildingActions.ExitBuilding : PathBuildingActions.EnterBuilding;
-                cycle = Random.Range(1, previousSegment.Indoors ? maxConsecutiveOutdoors : maxConsecutiveIndoors);
+                if (cycle <= 0)
+                {
+                    currentSegment.BuildingAction = previousSegment.Indoors ? PathBuildingActions.ExitBuilding : PathBuildingActions.EnterBuilding;
+                    cycle = Random.Range(1, previousSegment.Indoors ? maxConsecutiveOutdoors : maxConsecutiveIndoors);
+                }
             }
             currentSegment.ElevationAction = Random.value > chanceOfAction || validElevationActions.Count <= 0 ? PathElevationActions.None : validElevationActions[Random.Range(0, validElevationActions.Count)];
             currentSegment.Direction = Random.value > chanceOfNoneDirectionOnElevationChange && currentSegment.ElevationAction != PathElevationActions.None 
-                ? PathDirections.None : validDirections[Random.Range(0, validDirections.Count)];
+                ? PathDirection.None : validDirections[Random.Range(0, validDirections.Count)];
             currentSegment.Length = validLengths[Random.Range(0, validLengths.Count)];
             currentSegment.Width = validWidths[Random.Range(0, validWidths.Count)];
             currentSegment.Indoors = currentSegment.BuildingAction switch
@@ -94,7 +88,7 @@ public class PathGenerator : MonoBehaviour
 
     public void PrintPath()
     {
-        foreach (var segment in pathSegments)
+        foreach (var segment in PathSegments)
         {
             Debug.Log($"{segment.Direction}, {segment.ElevationAction}, {segment.BuildingAction}, {segment.Length}, {segment.Width}, {segment.Indoors}");
         }
@@ -112,16 +106,16 @@ public class PathGenerator : MonoBehaviour
 
         var currentPoint = Vector3.zero;
         var previousPoint = Vector3.zero;
-        foreach (var segment in pathSegments)
+        foreach (var segment in PathSegments)
         {
             Gizmos.color = segment.Indoors ? Color.blue : Color.red;
 
             currentPoint = segment.Direction switch
             {
-                PathDirections.None => Vector3.zero,
-                PathDirections.Straight => Vector3.forward,
-                PathDirections.Left => Vector3.left,
-                PathDirections.Right => Vector3.right,
+                PathDirection.None => Vector3.zero,
+                PathDirection.Straight => Vector3.forward,
+                PathDirection.Left => Vector3.left,
+                PathDirection.Right => Vector3.right,
                 _ => currentPoint
             };
             if (segment.Length == PathLengths.Long)
@@ -153,7 +147,7 @@ public class PathGenerator : MonoBehaviour
 
 public class PathSegment
 {
-    public PathDirections Direction;
+    public PathDirection Direction;
     public PathElevationActions ElevationAction;
     public PathBuildingActions BuildingAction;
     public PathLengths Length;
@@ -162,7 +156,7 @@ public class PathSegment
     public bool Indoors;
 }
 
-public enum PathDirections
+public enum PathDirection
 {
     None,
     Straight,
