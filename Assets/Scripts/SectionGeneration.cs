@@ -51,6 +51,13 @@ public class SectionGeneration : MonoBehaviour
                 var entryIndex = Array.IndexOf(chosen.section.ValidEntryNodes, chosen.entry);
                 currentEntry = currentSection.ValidEntryNodes[entryIndex];
                 
+                if (previousExit.disablesEntry)
+                {
+                    if (currentEntry.disablesExit)
+                    {
+                        
+                    }
+                }
                 currentEntry.Activate();
                 currentSection.transform.position = 
                     currentSection.transform.position - currentEntry.transform.position + previousExit.transform.position;
