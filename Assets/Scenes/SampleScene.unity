@@ -1430,7 +1430,7 @@ GameObject:
   - component: {fileID: 1458132571}
   - component: {fileID: 1458132570}
   m_Layer: 0
-  m_Name: PathGenerator
+  m_Name: PathGeneration
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
