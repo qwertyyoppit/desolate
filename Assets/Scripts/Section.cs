@@ -7,6 +7,8 @@ public class Section : MonoBehaviour
     public GameObject SectionGroups;
     public GameObject EntryNodes;
     public GameObject ExitNodes;
+
+    public bool Indoors;
     
     public EntryNode[] ValidEntryNodes => EntryNodes.GetComponentsInChildren<EntryNode>(true).ToArray();
 

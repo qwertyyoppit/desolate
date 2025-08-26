@@ -28,7 +28,7 @@ public class SectionGeneration : MonoBehaviour
             if (previousSegment != null)
             {
                 List<(Section section, EntryNode entry)> possibleSections = new();
-                foreach (var section in new List<Section> { sectionPrefab.GetComponent<Section>() })
+                foreach (var section in SectionDatabase.Instance.GetSections())
                 {
                     var possibleEntries = 
                         (from node in section.GetEntryNodesOfDirection(previousExit.direction) 
@@ -50,17 +50,46 @@ public class SectionGeneration : MonoBehaviour
                 //know where to find it in the instance.
                 var entryIndex = Array.IndexOf(chosen.section.ValidEntryNodes, chosen.entry);
                 currentEntry = currentSection.ValidEntryNodes[entryIndex];
-                
-                if (previousExit.disablesEntry)
+
+                // indoor exit > indoor entry > exit > entry; decides which shows their objects.
+                // Regardless, they disable the objects they would have disabled before.
+                // If neither disable each other, both show up; this is why disableEntry in exits is true by default.
+                if (currentEntry.disablesExit)
                 {
-                    if (currentEntry.disablesExit)
+                    if (previousExit.disablesEntry)
                     {
-                        
+                        if (segment.Indoors)
+                        {
+                            if (previousSegment.Indoors)
+                            {
+                                previousExit.Activate();
+                                currentEntry.Activate(false);
+                            }
+                            else
+                            {
+                                previousExit.Activate(false);
+                                currentEntry.Activate();
+                            }
+                        }
+                        else
+                        {
+                            previousExit.Activate();
+                            currentEntry.Activate(false);
+                        }
+                    }
+                    else
+                    {
+                        previousExit.Activate();
+                        currentEntry.Activate(false);
                     }
                 }
-                currentEntry.Activate();
-                currentSection.transform.position = 
-                    currentSection.transform.position - currentEntry.transform.position + previousExit.transform.position;
+                else
+                {
+                    previousExit.Activate();
+                    currentEntry.Activate(!previousExit.disablesEntry);
+                }
+                currentSection.transform.position =
+                currentSection.transform.position - currentEntry.transform.position + previousExit.transform.position;
             }
             else
             {

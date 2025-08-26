@@ -4,5 +4,5 @@ public class ExitNode : Node
 {
     public PathDirection direction;
 
-    public bool disablesEntry;
+    public bool disablesEntry = true;
 }

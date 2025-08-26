@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 902ea953b8b6e704c87809c0d57bcf6a, type: 3}
+  m_Name: SectionDatabase
+  m_EditorClassIdentifier: 
+  sections:
+  - {fileID: 2813571967509562669, guid: d26c98b9a039050408a20860e484d7d2, type: 3}
+  - {fileID: 2813571967509562669, guid: 7b3d2dd9def1a0e4a9706e2da9005ebe, type: 3}

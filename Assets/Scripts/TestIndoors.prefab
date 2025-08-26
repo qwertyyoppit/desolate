@@ -81,7 +81,9 @@ MonoBehaviour:
   disableOnNodeUsage:
   - {fileID: 4091750272822786793}
   - {fileID: 2939592612696151802}
+  elevated: 0
   direction: 3
+  disablesExit: 0
 --- !u!1 &570898964382319831
 GameObject:
   m_ObjectHideFlags: 0
@@ -1062,7 +1064,9 @@ MonoBehaviour:
   - {fileID: 954075473337811356}
   disableOnNodeUsage:
   - {fileID: 3696133112400570487}
+  elevated: 0
   direction: 1
+  disablesExit: 0
 --- !u!1 &2624124294487505423
 GameObject:
   m_ObjectHideFlags: 0
@@ -1182,7 +1186,7 @@ GameObject:
   - component: {fileID: 2794020929258715824}
   - component: {fileID: 977169988080056793}
   m_Layer: 0
-  m_Name: Section 1
+  m_Name: TestIndoors
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1221,6 +1225,7 @@ MonoBehaviour:
   SectionGroups: {fileID: 5096953270756981588}
   EntryNodes: {fileID: 570898964382319831}
   ExitNodes: {fileID: 6687370169858583867}
+  Indoors: 1
 --- !u!1 &2939592612696151802
 GameObject:
   m_ObjectHideFlags: 0
@@ -1237,7 +1242,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4354165674482227991
 Transform:
   m_ObjectHideFlags: 0
@@ -1269,7 +1274,9 @@ MonoBehaviour:
   - {fileID: 4195920739006030992}
   disableOnNodeUsage:
   - {fileID: 4091750272822786793}
+  elevated: 0
   direction: 2
+  disablesEntry: 1
 --- !u!1 &3057098757738376100
 GameObject:
   m_ObjectHideFlags: 0
@@ -1318,7 +1325,9 @@ MonoBehaviour:
   - {fileID: 8773392785708324528}
   disableOnNodeUsage:
   - {fileID: 6583077426456736083}
+  elevated: 0
   direction: 1
+  disablesEntry: 1
 --- !u!1 &3077911370542190137
 GameObject:
   m_ObjectHideFlags: 0
@@ -1692,7 +1701,9 @@ MonoBehaviour:
   disableOnNodeUsage:
   - {fileID: 4650286503634433342}
   - {fileID: 7360535966745080763}
+  elevated: 0
   direction: 2
+  disablesExit: 0
 --- !u!1 &3696133112400570487
 GameObject:
   m_ObjectHideFlags: 0
@@ -2555,7 +2566,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2939902070064379987
 Transform:
   m_ObjectHideFlags: 0
@@ -2587,7 +2598,9 @@ MonoBehaviour:
   - {fileID: 6740417484241442654}
   disableOnNodeUsage:
   - {fileID: 4650286503634433342}
+  elevated: 0
   direction: 3
+  disablesEntry: 1
 --- !u!1 &7438716852233907367
 GameObject:
   m_ObjectHideFlags: 0
