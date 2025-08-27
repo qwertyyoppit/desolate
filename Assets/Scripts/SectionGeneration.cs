@@ -12,6 +12,8 @@ public class SectionGeneration : MonoBehaviour
     
     [SerializeField] private GameObject sectionPrefab;
 
+    public SectionDatabase sectionSelection;
+
     private void Start()
     {
         pathSegments = PathGenerator.PathSegments;
@@ -28,18 +30,20 @@ public class SectionGeneration : MonoBehaviour
             if (previousSegment != null)
             {
                 List<(Section section, EntryNode entry)> possibleSections = new();
-                foreach (var section in SectionDatabase.Instance.GetSections())
+                foreach (var section in sectionSelection.GetSections())
                 {
                     var possibleEntries = 
-                        (from node in section.GetEntryNodesOfDirection(previousExit.direction) 
+                        (from entry in (from entry in section.GetEntryNodesOfDirection(segment.Direction) where CompareEntrySegmentElevation(segment, entry) select entry)
                         //get entries going the previous exit's direction
                         from exit in section.GetExitNodesOfDirection(segment.Direction == PathDirection.None ? PathDirection.Straight : segment.Direction) 
                         //get exits going the current direction
-                        where !node.disableOnNodeUsage.Contains(exit.gameObject)
-                        //return entry if there is any valid exit that would not get disabled by it
-                        select node).ToArray();
+                        where !entry.disableOnNodeUsage.Contains(exit.gameObject)
+                         //return entry if there is any valid exit that would not get disabled by it
+                        where (from enabled in entry.enableOnNodeUsage where enabled.TryGetComponent<ExitNode>(out _) select enabled).ToArray().Length > 0
+                        && entry.enableOnNodeUsage.Contains(exit.gameObject)
+                        select entry).ToArray();
                     var determinedEntry = possibleEntries[Random.Range(0, possibleEntries.Length)];
-                    possibleSections.Add(new ValueTuple<Section, EntryNode>(section, determinedEntry)); 
+                    possibleSections.Add(new ValueTuple<Section, EntryNode>(section, determinedEntry));
                     //list of sections and their predetermined entries, so we only use the entry that made the section valid
                 }
                 var chosen = possibleSections[Random.Range(0, possibleSections.Count)];
@@ -95,12 +99,35 @@ public class SectionGeneration : MonoBehaviour
             {
                 currentSection = Instantiate(sectionPrefab).GetComponent<Section>();
             }
+
+            sections.Add(currentSection);
             
-            var possibleExits = currentSection.GetExitNodesOfDirection(segment.Direction == PathDirection.None ? PathDirection.Straight : segment.Direction);
+            var possibleExits = (from exit in currentSection.GetExitNodesOfDirection(segment.Direction == PathDirection.None ? PathDirection.Straight : segment.Direction)
+                                 where CompareExitSegmentElevation(segment, exit) select exit).ToArray();
             previousExit = possibleExits[Random.Range(0, possibleExits.Length)];
             previousExit.Activate();
             
             previousSegment = segment;
         }
+    }
+
+    private bool CompareEntrySegmentElevation(PathSegment segment, EntryNode entry)
+    {
+        return segment.ElevationAction switch
+        {
+            PathElevationActions.None  => !entry.elevated,
+            PathElevationActions.Descend => entry.elevated,
+            _ => true,
+        };
+    }
+
+    private bool CompareExitSegmentElevation(PathSegment segment, ExitNode exit)
+    {
+        return segment.ElevationAction switch
+        {
+            PathElevationActions.None => !exit.elevated,
+            PathElevationActions.Ascend => exit.elevated,
+            _ => true,
+        };
     }
 }
