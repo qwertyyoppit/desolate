@@ -8,7 +8,7 @@ public class SectionGeneration : MonoBehaviour
 {
     private List<PathSegment> pathSegments;
 
-    private List<Section> sections;
+    private List<Section> sections = new();
     
     [SerializeField] private GameObject sectionPrefab;
 
@@ -33,21 +33,21 @@ public class SectionGeneration : MonoBehaviour
                 foreach (var section in sectionSelection.GetSections())
                 {
                     var possibleEntries = 
-                        (from entry in (from entry in section.GetEntryNodesOfDirection(segment.Direction) where CompareEntrySegmentElevation(segment, entry) select entry)
+                        (from entry in (from entry in section.GetEntryNodesOfDirection(previousExit.direction) where CompareEntrySegmentElevation(segment, entry) select entry)
                         //get entries going the previous exit's direction
                         from exit in section.GetExitNodesOfDirection(segment.Direction == PathDirection.None ? PathDirection.Straight : segment.Direction) 
                         //get exits going the current direction
                         where !entry.disableOnNodeUsage.Contains(exit.gameObject)
                          //return entry if there is any valid exit that would not get disabled by it
-                        where (from enabled in entry.enableOnNodeUsage where enabled.TryGetComponent<ExitNode>(out _) select enabled).ToArray().Length > 0
-                        && entry.enableOnNodeUsage.Contains(exit.gameObject)
+                        //where (from enabled in entry.enableOnNodeUsage where enabled.TryGetComponent<ExitNode>(out _) select enabled).ToArray().Length > 0
+                        //&& entry.enableOnNodeUsage.Contains(exit.gameObject)
                         select entry).ToArray();
                     var determinedEntry = possibleEntries[Random.Range(0, possibleEntries.Length)];
                     possibleSections.Add(new ValueTuple<Section, EntryNode>(section, determinedEntry));
                     //list of sections and their predetermined entries, so we only use the entry that made the section valid
                 }
                 var chosen = possibleSections[Random.Range(0, possibleSections.Count)];
-                currentSection = Instantiate(chosen.section);
+                currentSection = Instantiate(chosen.section.gameObject).GetComponent<Section>();
                 //We need a reference to the same entry in the section instance, as
                 //using chosen.entry would edit the prefab file (which we do not want).
                 //Instead, we get the index of the entry in the section prefab so we
