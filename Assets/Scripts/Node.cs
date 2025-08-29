@@ -10,9 +10,9 @@ public class Node : MonoBehaviour
         "\nThis is used by the section generator to detect which sections have an elevation change and to then filter the nodes accordingly.")]
     public bool elevated;
 
-    public virtual void Activate(bool enabled = true)
+    public void Activate(bool enabling = true)
     {
-        if (enabled)
+        if (enabling)
         {
             foreach (var obj in enableOnNodeUsage)
                 obj.SetActive(true);
@@ -20,11 +20,4 @@ public class Node : MonoBehaviour
         foreach (var obj in disableOnNodeUsage)
             obj.SetActive(false);
     }
-}
-
-public enum NodeDirection
-{
-    Straight,
-    Left,
-    Right
 }

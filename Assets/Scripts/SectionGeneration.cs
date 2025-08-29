@@ -30,18 +30,20 @@ public class SectionGeneration : MonoBehaviour
             if (previousSegment != null)
             {
                 List<(Section section, EntryNode entry)> possibleSections = new();
-                foreach (var section in sectionSelection.GetSections())
+                foreach (var section in (from section in sectionSelection.GetSections() where section.Indoors == segment.Indoors select section))
                 {
                     var possibleEntries = 
-                        (from entry in (from entry in section.GetEntryNodesOfDirection(previousExit.direction) where CompareEntrySegmentElevation(segment, entry) select entry)
+                        (from entry in section.GetEntryNodesOfDirection(previousExit.direction) where CompareEntrySegmentElevation(segment, entry)
                         //get entries going the previous exit's direction
                         from exit in section.GetExitNodesOfDirection(segment.Direction == PathDirection.None ? PathDirection.Straight : segment.Direction) 
                         //get exits going the current direction
                         where !entry.disableOnNodeUsage.Contains(exit.gameObject)
                          //return entry if there is any valid exit that would not get disabled by it
+                        where CompareExitSegmentElevation(segment, exit)
                         //where (from enabled in entry.enableOnNodeUsage where enabled.TryGetComponent<ExitNode>(out _) select enabled).ToArray().Length > 0
                         //&& entry.enableOnNodeUsage.Contains(exit.gameObject)
                         select entry).ToArray();
+                    if (possibleEntries.Length <= 0) continue;
                     var determinedEntry = possibleEntries[Random.Range(0, possibleEntries.Length)];
                     possibleSections.Add(new ValueTuple<Section, EntryNode>(section, determinedEntry));
                     //list of sections and their predetermined entries, so we only use the entry that made the section valid
@@ -105,7 +107,6 @@ public class SectionGeneration : MonoBehaviour
             var possibleExits = (from exit in currentSection.GetExitNodesOfDirection(segment.Direction == PathDirection.None ? PathDirection.Straight : segment.Direction)
                                  where CompareExitSegmentElevation(segment, exit) select exit).ToArray();
             previousExit = possibleExits[Random.Range(0, possibleExits.Length)];
-            previousExit.Activate();
             
             previousSegment = segment;
         }
@@ -115,7 +116,7 @@ public class SectionGeneration : MonoBehaviour
     {
         return segment.ElevationAction switch
         {
-            PathElevationActions.None  => !entry.elevated,
+            PathElevationActions.None => !entry.elevated,
             PathElevationActions.Descend => entry.elevated,
             _ => true,
         };
