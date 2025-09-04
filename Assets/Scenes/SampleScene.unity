@@ -775,7 +775,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 2074351333}
-  lookSpeed: 25
+  lookSpeed: 75
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -2064,6 +2064,7 @@ MonoBehaviour:
   walkMaxSpeed: 5
   jumpForce: 5
   groundCheck: 0.01
+  checkStart: 0.02
 --- !u!54 &2074351330
 Rigidbody:
   m_ObjectHideFlags: 0

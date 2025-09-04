@@ -11,6 +11,18 @@ public class SectionGeneration : MonoBehaviour
     private List<Section> sections = new();
     
     [SerializeField] private GameObject sectionPrefab;
+    private static GameObject _sectionsObject;
+    private static GameObject SectionsObject
+    {
+        get
+        {
+            if (!_sectionsObject)
+            {
+                _sectionsObject = new GameObject("sections");
+            }
+            return _sectionsObject;
+        }
+    }
 
     public SectionDatabase sectionSelection;
 
@@ -21,6 +33,7 @@ public class SectionGeneration : MonoBehaviour
 
     public void Generate()
     {
+        foreach (Transform obj in SectionsObject.transform) Destroy(obj.gameObject);
         PathSegment previousSegment = null;
         ExitNode previousExit = null;
         foreach (var segment in pathSegments)
@@ -49,7 +62,7 @@ public class SectionGeneration : MonoBehaviour
                     //list of sections and their predetermined entries, so we only use the entry that made the section valid
                 }
                 var chosen = possibleSections[Random.Range(0, possibleSections.Count)];
-                currentSection = Instantiate(chosen.section.gameObject).GetComponent<Section>();
+                currentSection = Instantiate(chosen.section.gameObject, SectionsObject.transform).GetComponent<Section>();
                 //We need a reference to the same entry in the section instance, as
                 //using chosen.entry would edit the prefab file (which we do not want).
                 //Instead, we get the index of the entry in the section prefab so we
@@ -99,7 +112,7 @@ public class SectionGeneration : MonoBehaviour
             }
             else
             {
-                currentSection = Instantiate(sectionPrefab).GetComponent<Section>();
+                currentSection = Instantiate(sectionPrefab, SectionsObject.transform).GetComponent<Section>();
             }
 
             sections.Add(currentSection);

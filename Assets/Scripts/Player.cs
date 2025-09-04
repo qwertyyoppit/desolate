@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
 
     private bool grounded;
     [SerializeField] private float groundCheck;
+    [SerializeField] private float checkStart;
 
     private bool crouching;
 
@@ -37,12 +38,12 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        grounded = Physics.CapsuleCast(
-            new Vector3(ActiveCollider.center.x, ActiveCollider.bounds.max.y - ActiveCollider.radius, ActiveCollider.center.z),
-            new Vector3(ActiveCollider.center.x, ActiveCollider.bounds.min.y + ActiveCollider.radius, ActiveCollider.center.z),
-            ActiveCollider.radius - 0.01f,
+        grounded = Physics.SphereCast(
+            new Vector3(ActiveCollider.center.x, ActiveCollider.bounds.min.y + ActiveCollider.radius - checkStart, ActiveCollider.center.z),
+            ActiveCollider.radius,
             Vector3.down,
-            groundCheck + 0.01f, 
+            out var _,
+            groundCheck + checkStart, 
             LayerMask.GetMask("Terrain"));
     }
 
@@ -53,7 +54,10 @@ public class Player : MonoBehaviour
         moveDir.y = 0f;
         moveDir.Normalize();
         var topVelocity = moveDir * (walkMaxSpeed);//+ velocity of platform below
-        var force = Vector3.MoveTowards(rb.linearVelocity, topVelocity, walkAcceleration * Time.deltaTime);
+        var moveVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+        var magnitude = walkAcceleration * Time.deltaTime;
+        if (Vector3.Dot(moveVelocity, moveDir) < 0) magnitude *= 2;
+        var force = Vector3.MoveTowards(moveVelocity, topVelocity, magnitude);
         
         rb.linearVelocity = new Vector3(force.x, rb.linearVelocity.y, force.z);
     }
