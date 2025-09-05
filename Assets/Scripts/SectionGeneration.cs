@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.AI.Navigation;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -123,6 +124,8 @@ public class SectionGeneration : MonoBehaviour
             
             previousSegment = segment;
         }
+
+        GameObject.Find("navgenerate").GetComponent<NavMeshSurface>().BuildNavMesh();
     }
 
     private bool CompareEntrySegmentElevation(PathSegment segment, EntryNode entry)

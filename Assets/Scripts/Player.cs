@@ -39,11 +39,11 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         grounded = Physics.SphereCast(
-            new Vector3(ActiveCollider.center.x, ActiveCollider.bounds.min.y + ActiveCollider.radius - checkStart, ActiveCollider.center.z),
-            ActiveCollider.radius,
-            Vector3.down,
+            transform.TransformPoint(ActiveCollider.center), 
+            ActiveCollider.radius - 0.01f,
+            -transform.up,
             out var _,
-            groundCheck + checkStart, 
+            groundCheck + ActiveCollider.height/2, 
             LayerMask.GetMask("Terrain"));
     }
 
@@ -88,6 +88,7 @@ public class Player : MonoBehaviour
     {
         if (!grounded)
             return;
+        Debug.Log("jupping");
         rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
     }
 }
