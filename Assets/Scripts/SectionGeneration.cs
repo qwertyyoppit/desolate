@@ -27,9 +27,25 @@ public class SectionGeneration : MonoBehaviour
 
     public SectionDatabase sectionSelection;
 
+    public static SectionGeneration _instance;
+    public static SectionGeneration Instance
+    {
+        get
+        {
+            if (!_instance)
+                _instance = new GameObject("SectionGeneration").AddComponent<SectionGeneration>();
+            return _instance;
+        }
+    }
+
+    private void Awake()
+    {
+        _instance = this;
+    }
+
     private void Start()
     {
-        pathSegments = PathGenerator.PathSegments;
+        pathSegments = PathGeneration.PathSegments;
     }
 
     public void Generate()

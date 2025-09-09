@@ -776,6 +776,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 2074351333}
   lookSpeed: 75
+  shadertest: {fileID: -6465566751694194690, guid: d40fa151e0695cd40bd89060d1788eda, type: 3}
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -961,7 +962,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: -876546973899608171, guid: bf32355594c068449a0343d5f044c894, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2328,13 +2329,13 @@ SceneRoots:
   - {fileID: 330585546}
   - {fileID: 410087041}
   - {fileID: 832575519}
+  - {fileID: 1313130055}
+  - {fileID: 1458132571}
+  - {fileID: 620389067}
   - {fileID: 2074351333}
   - {fileID: 534376571}
   - {fileID: 38992425}
   - {fileID: 154555570}
-  - {fileID: 1313130055}
-  - {fileID: 1458132571}
-  - {fileID: 620389067}
   - {fileID: 1340076367}
   - {fileID: 1003787657}
   - {fileID: 136283509}

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PathGenerator : MonoBehaviour
+public class PathGeneration : MonoBehaviour
 {
     [SerializeField] private int segmentAmount = 15;
     [SerializeField] private int maxConsecutiveOutdoors = 8;
@@ -15,9 +15,20 @@ public class PathGenerator : MonoBehaviour
 
     public bool drawPathGizmo;
 
+    public static PathGeneration _instance;
+    public static PathGeneration Instance
+    {
+        get
+        {
+            if (!_instance)
+                _instance = new GameObject("PathGeneration").AddComponent<PathGeneration>();
+            return _instance;
+        }
+    }
+
     private void Awake()
     {
-        GeneratePath();
+        _instance = this;
     }
 
     public void GeneratePath()
