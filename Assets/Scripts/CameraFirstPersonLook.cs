@@ -10,8 +10,6 @@ public class CameraFirstPersonLook : MonoBehaviour
     [Space]
     [SerializeField] private float lookSpeed;
 
-    [SerializeField] private Shader shadertest;
-
     private void Update()
     {
         transform.position = player.position;
@@ -23,10 +21,5 @@ public class CameraFirstPersonLook : MonoBehaviour
         yaw += look.x;
         pitch = Mathf.Clamp(pitch, -89.5f, 89.5f);
         transform.rotation = Quaternion.Euler(pitch, yaw, 0.0f);
-    }
-
-    private void LateUpdate()
-    {
-        Camera.main.RenderWithShader(shadertest, "RenderType");
     }
 }

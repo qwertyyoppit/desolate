@@ -41,15 +41,15 @@
     ],
     "m_VertexContext": {
         "m_Position": {
-            "x": -16.0,
-            "y": -8.0
+            "x": 23.0,
+            "y": -28.0
         },
         "m_Blocks": []
     },
     "m_FragmentContext": {
         "m_Position": {
-            "x": 407.0,
-            "y": 188.0
+            "x": 376.0,
+            "y": 203.0
         },
         "m_Blocks": [
             {
@@ -101,7 +101,7 @@
     "m_StageCapability": 3,
     "m_Value": {
         "x": 0.0,
-        "y": 0.0,
+        "y": 0.5,
         "z": 0.0
     },
     "m_DefaultValue": {
@@ -124,8 +124,8 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 21.0,
-            "y": 147.0,
+            "x": 54.0,
+            "y": 208.0,
             "width": 208.0,
             "height": 302.0
         }
