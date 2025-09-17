@@ -30,7 +30,10 @@ public class Player : MonoBehaviour
         cam = Camera.main;
         rb = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
+    }
 
+    private void Start()
+    {
         playerInput.actions["Crouch"].started += _ => StartCrouch();
         playerInput.actions["Crouch"].canceled += _ => StopCrouch();
         playerInput.actions["Jump"].started += _ => Jump();
