@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
+[ExecuteInEditMode]
 public class SanityVisualEffect : MonoBehaviour
 {
     private PlayerSanity sanity;
@@ -27,8 +28,15 @@ public class SanityVisualEffect : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (_vignette) _vignette.intensity.value = Mathf.Lerp(0.8f, 0.2f, sanity.sanity / 100f);
+        if (_vignette)
+        {
+            _vignette.intensity.overrideState = true;
+            _vignette.intensity.value = Mathf.Lerp(0.8f, 0.2f, sanity.sanity / 100f);
+        }
     }
 
-
+    private void OnDisable()
+    {
+        if (_vignette) _vignette.intensity.overrideState = false;
+    }
 }

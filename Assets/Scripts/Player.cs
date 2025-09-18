@@ -37,6 +37,7 @@ public class Player : MonoBehaviour
         playerInput.actions["Crouch"].started += _ => StartCrouch();
         playerInput.actions["Crouch"].canceled += _ => StopCrouch();
         playerInput.actions["Jump"].started += _ => Jump();
+        playerInput.actions["Exit"].started += _ => UIManager.ToggleFreeCursor();
     }
 
     private void FixedUpdate()
@@ -63,14 +64,6 @@ public class Player : MonoBehaviour
         var force = Vector3.MoveTowards(moveVelocity, topVelocity, magnitude);
         
         rb.linearVelocity = new Vector3(force.x, rb.linearVelocity.y, force.z);
-    }
-
-    private void LateUpdate()
-    {
-        if (playerInput.actions["Cancel"].triggered)
-        {
-            UIManager.ToggleFreeCursor();
-        }
     }
 
     private void StartCrouch()

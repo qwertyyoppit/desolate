@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,6 +40,7 @@ public class PlayerSanity : MonoBehaviour
     }
 }
 
+[Serializable]
 public class SanityOvertimeEffect
 {
     public float Amount;

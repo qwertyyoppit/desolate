@@ -14,7 +14,9 @@ public class CameraFirstPersonLook : MonoBehaviour
     {
         transform.position = player.position;
         if (Cursor.lockState == CursorLockMode.None)
+        {
             return;
+        }
         var look = Mouse.current.delta.value * (lookSpeed * Time.deltaTime);
 
         pitch -= look.y;

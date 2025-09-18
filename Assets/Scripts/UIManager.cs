@@ -15,7 +15,7 @@ public class UIManager : MonoBehaviour
 
     public static void ToggleFreeCursor()
     {
-        if (Cursor.visible)
+        if (Cursor.lockState == CursorLockMode.None)
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;

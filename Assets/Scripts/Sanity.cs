@@ -6,15 +6,16 @@ public class Sanity
     public static Action<SanityEffectArgs> SanityEffect = delegate { };
 }
 
+[Serializable]
 public class SanityEffectArgs
 {
-    public readonly SanityEffectType EffectType;
-    public readonly float Duration;
-    public readonly float SanityAmount;
+    public SanityEffectType EffectType;
+    public float Duration;
+    public float SanityAmount;
 
     public readonly GameObject Invoker;
 
-    public SanityEffectArgs(SanityEffectType effectType, float sanityAmount, float duration = 0f, GameObject invoker = null)
+    public SanityEffectArgs(SanityEffectType effectType = SanityEffectType.Instant, float sanityAmount = 10f, float duration = 0f, GameObject invoker = null)
     {
         EffectType = effectType;
         SanityAmount = sanityAmount;
