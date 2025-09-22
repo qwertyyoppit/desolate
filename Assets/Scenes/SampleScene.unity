@@ -1525,7 +1525,7 @@ GameObject:
   - component: {fileID: 1045091921}
   - component: {fileID: 1045091920}
   - component: {fileID: 1045091923}
-  - component: {fileID: 1045091919}
+  - component: {fileID: 1045091924}
   m_Layer: 0
   m_Name: evil
   m_TagString: Untagged
@@ -1533,22 +1533,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1045091919
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1045091918}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f6d65e830470be419ff9b20ee9ca4cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  effectArgs:
-    EffectType: 1
-    Duration: 1
-    SanityAmount: 10
 --- !u!23 &1045091920
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1638,6 +1622,20 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 3
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1045091924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1045091918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85b9de38a4870fb4e95200959784e0f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  strength: 5
+  interpolate: 1
 --- !u!1 &1313130052
 GameObject:
   m_ObjectHideFlags: 0
