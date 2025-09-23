@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,11 +18,12 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float jumpForce;
 
-    private bool grounded;
     [SerializeField] private float groundCheck;
     [SerializeField] private float checkStart;
 
-    private bool crouching;
+    [NonSerialized] private bool grounded;
+    [NonSerialized] public bool crouching;
+    [NonSerialized] public bool jumping;
 
     private Vector2 movement;
 
@@ -36,7 +38,8 @@ public class Player : MonoBehaviour
     {
         playerInput.actions["Crouch"].started += _ => StartCrouch();
         playerInput.actions["Crouch"].canceled += _ => StopCrouch();
-        playerInput.actions["Jump"].started += _ => Jump();
+        playerInput.actions["Jump"].started += _ => StartJump();
+        playerInput.actions["Jump"].canceled += _ => StopJump();
         playerInput.actions["Exit"].started += _ => UIManager.ToggleFreeCursor();
     }
 
@@ -80,11 +83,18 @@ public class Player : MonoBehaviour
         crouchCollider.enabled = false;
     }
 
-    private void Jump()
+    private void StartJump()
     {
         if (!grounded)
             return;
-        Debug.Log("jupping");
+        jumping = true;
         rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
+    }
+
+    private void StopJump()
+    {
+        if (!jumping) return;
+        jumping = false;
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, Mathf.Min(rb.linearVelocity.y, rb.linearVelocity.y * 0.1f), rb.linearVelocity.z);
     }
 }
