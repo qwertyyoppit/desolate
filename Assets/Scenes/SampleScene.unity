@@ -789,9 +789,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c371bee04d77b264dabed47828c14abb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effectIntensity: 0.2
-  effectIntensityX: 0
-  effectSpeed: 7
+  effectIntensity: 0.1
+  effectIntensityX: 1
+  effectSpeed: 3
+  effectSpeedX: 3
   following: {fileID: 2074351333}
   offset: {x: 0, y: 0, z: 0}
 --- !u!1 &410087039
@@ -2335,6 +2336,7 @@ MonoBehaviour:
   walkAcceleration: 15
   walkMaxAcceleration: 0
   walkMaxSpeed: 5
+  rotateSpeed: 120
   jumpForce: 5
   groundCheck: 0.01
   checkStart: 0.02

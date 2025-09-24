@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float walkAcceleration;
     [SerializeField] private float walkMaxAcceleration;
     [SerializeField] private float walkMaxSpeed;
+    [SerializeField] private float rotateSpeed = 120f;
 
     [SerializeField] private float jumpForce;
 
@@ -67,6 +68,7 @@ public class Player : MonoBehaviour
         var force = Vector3.MoveTowards(moveVelocity, topVelocity, magnitude);
         
         rb.linearVelocity = new Vector3(force.x, rb.linearVelocity.y, force.z);
+        transform.forward = Vector3.RotateTowards(transform.forward, moveDir, rotateSpeed * Time.deltaTime, 0.0f);
     }
 
     private void StartCrouch()
