@@ -13,10 +13,12 @@ public class Viewbobbing : MonoBehaviour
     [SerializeField] private float effectIntensityX;
     [SerializeField] private float effectSpeed;
     [SerializeField] private float effectSpeedX;
+    [SerializeField] private float effectAmount;
+    [SerializeField] private float effectAmountX;
 
     [SerializeField] private Transform following;
     [SerializeField] private Vector3 offset;
-    private float _sinTime;
+    private float _sinTime = 2f;
     private float _sinXTime;
 
     private void Start()
@@ -36,20 +38,23 @@ public class Viewbobbing : MonoBehaviour
     {
         if (!player) return;
         var move = playerMovement.ReadValue<Vector2>();
+        var moving = move.sqrMagnitude > 0;
 
-        _sinTime = Mathf.MoveTowards(_sinTime, move.magnitude > 0 && !player.jumping ? 1f : 0.5f, Time.deltaTime * effectSpeed * (player.crouching ? 0.5f : 1f)) % 1;
+        var playerBody = player.GetComponent<Rigidbody>();
 
-        _sinXTime = Mathf.MoveTowards(_sinXTime, move.magnitude > 0 && !player.jumping ? 2f : 1f, Time.deltaTime * effectSpeedX * (player.crouching ? 0.5f : 1f)) % 2;
+        _sinTime = Mathf.MoveTowards(_sinTime, moving && !player.jumping ? 2f : 1f, Time.deltaTime * effectSpeed * (new Vector3(playerBody.linearVelocity.x, 0f, playerBody.linearVelocity.z).magnitude) / player.walkMaxSpeed) % 2;
 
-        var sinValue = Mathf.Sin((_sinTime-0.5f) * Mathf.PI);
+        var sinValue = Mathf.Sin((_sinTime) * Mathf.PI);
 
-        var sinAmount = -Mathf.Abs(effectIntensity * sinValue);
+        effectAmount = moving ? Mathf.MoveTowards(effectAmount, -Mathf.Abs(effectIntensity * sinValue), effectSpeedX * Time.deltaTime) : Mathf.MoveTowards(effectAmount, 0, effectSpeedX * Time.deltaTime);
 
-        Vector3 sinAmountX = effectIntensityX * Mathf.Sin((_sinXTime) * Mathf.PI) * transform.right;
+        effectAmountX = moving ? Mathf.MoveTowards(effectAmountX, effectIntensityX * Mathf.Sin((_sinTime) * Mathf.PI), effectSpeedX * Time.deltaTime) : Mathf.MoveTowards(effectAmountX, 0, effectSpeedX * Time.deltaTime);
+
+        Vector3 sinAmountX = effectAmountX * transform.right;
 
         transform.position += new Vector3(
             sinAmountX.x,
-            sinAmountX.y + sinAmount,
+            sinAmountX.y + effectAmount,
             sinAmountX.z);
     }
 }

@@ -790,9 +790,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   effectIntensity: 0.1
-  effectIntensityX: 1
+  effectIntensityX: 0.2
   effectSpeed: 3
-  effectSpeedX: 3
+  effectSpeedX: 5
+  effectAmount: 0
+  effectAmountX: 0
   following: {fileID: 2074351333}
   offset: {x: 0, y: 0, z: 0}
 --- !u!1 &410087039
@@ -2374,7 +2376,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2074351326}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1

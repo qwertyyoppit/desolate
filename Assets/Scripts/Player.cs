@@ -12,10 +12,10 @@ public class Player : MonoBehaviour
 
     private CapsuleCollider ActiveCollider => crouching ? crouchCollider : standCollider;
 
-    [SerializeField] private float walkAcceleration;
-    [SerializeField] private float walkMaxAcceleration;
-    [SerializeField] private float walkMaxSpeed;
-    [SerializeField] private float rotateSpeed = 120f;
+    public float walkAcceleration;
+    public float walkMaxAcceleration;
+    public float walkMaxSpeed;
+    public float rotateSpeed = 120f;
 
     [SerializeField] private float jumpForce;
 
@@ -47,11 +47,11 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         grounded = Physics.SphereCast(
-            transform.TransformPoint(ActiveCollider.center), 
-            ActiveCollider.radius - 0.01f,
+            transform.TransformPoint(new Vector3(ActiveCollider.center.x, ActiveCollider.bounds.min.y + ActiveCollider.radius/2, ActiveCollider.center.z)), 
+            ActiveCollider.radius - 0.02f,
             -transform.up,
             out var _,
-            groundCheck + ActiveCollider.height/2, 
+            groundCheck + 0.02f, 
             LayerMask.GetMask("Terrain"));
     }
 
@@ -61,7 +61,7 @@ public class Player : MonoBehaviour
         var moveDir = (cam.transform.forward * movement.y + cam.transform.right * movement.x);
         moveDir.y = 0f;
         moveDir.Normalize();
-        var topVelocity = moveDir * (walkMaxSpeed);//+ velocity of platform below
+        var topVelocity = moveDir * (walkMaxSpeed * (crouching ? 0.6f : 1));//+ velocity of platform below
         var moveVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
         var magnitude = walkAcceleration * Time.deltaTime;
         if (Vector3.Dot(moveVelocity, moveDir) < 0) magnitude *= 2;
@@ -96,6 +96,7 @@ public class Player : MonoBehaviour
     private void StopJump()
     {
         if (!jumping) return;
+        print(jumping);
         jumping = false;
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, Mathf.Min(rb.linearVelocity.y, rb.linearVelocity.y * 0.1f), rb.linearVelocity.z);
     }
