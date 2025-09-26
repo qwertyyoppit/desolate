@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float groundCheck;
     [SerializeField] private float checkStart;
 
-    [NonSerialized] private bool grounded;
+    [NonSerialized] public bool grounded;
     [NonSerialized] public bool crouching;
     [NonSerialized] public bool jumping;
 
@@ -47,11 +47,11 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         grounded = Physics.SphereCast(
-            transform.TransformPoint(new Vector3(ActiveCollider.center.x, ActiveCollider.bounds.min.y + ActiveCollider.radius/2, ActiveCollider.center.z)), 
-            ActiveCollider.radius - 0.02f,
+            transform.TransformPoint(new Vector3(ActiveCollider.center.x, ActiveCollider.center.y - ActiveCollider.height/2 + ActiveCollider.radius/2, ActiveCollider.center.z)), 
+            ActiveCollider.radius - checkStart,
             -transform.up,
             out var _,
-            groundCheck + 0.02f, 
+            groundCheck + checkStart, 
             LayerMask.GetMask("Terrain"));
     }
 

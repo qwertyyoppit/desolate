@@ -4,9 +4,16 @@ using UnityEngine;
 
 public class PlayerSanity : MonoBehaviour
 {
+    public static PlayerSanity instance;
+
     public float sanity = 100f;
 
     public List<SanityOvertimeEffect> sanityDrainEffects = new();
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     private void Start()
     {

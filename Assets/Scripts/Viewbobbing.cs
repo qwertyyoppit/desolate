@@ -42,7 +42,7 @@ public class Viewbobbing : MonoBehaviour
 
         var playerBody = player.GetComponent<Rigidbody>();
 
-        _sinTime = Mathf.MoveTowards(_sinTime, moving && !player.jumping ? 2f : 1f, Time.deltaTime * effectSpeed * (new Vector3(playerBody.linearVelocity.x, 0f, playerBody.linearVelocity.z).magnitude) / player.walkMaxSpeed) % 2;
+        _sinTime = Mathf.MoveTowards(_sinTime, moving && player.grounded ? 2f : 1f, Time.deltaTime * effectSpeed * (new Vector3(playerBody.linearVelocity.x, 0f, playerBody.linearVelocity.z).magnitude) / player.walkMaxSpeed) % 2;
 
         var sinValue = Mathf.Sin((_sinTime) * Mathf.PI);
 
