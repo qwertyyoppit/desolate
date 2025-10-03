@@ -306,7 +306,7 @@ GameObject:
   - component: {fileID: 129307975}
   - component: {fileID: 129307976}
   m_Layer: 5
-  m_Name: Butts
+  m_Name: Buttons
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2314,6 +2314,7 @@ GameObject:
   - component: {fileID: 2074351327}
   - component: {fileID: 2074351334}
   - component: {fileID: 2074351337}
+  - component: {fileID: 2074351338}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2527,6 +2528,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sanity: 100
   sanityDrainEffects: []
+--- !u!114 &2074351338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2074351326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57e314591e3f9fd479b7fd4804bb55c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hotbarCapacity: 3
+  inventoryCapacity: 3
+  hotbarSlots: []
+  inventorySlots: []
+  selectedItem: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

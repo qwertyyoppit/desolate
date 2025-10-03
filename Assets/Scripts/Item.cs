@@ -2,21 +2,12 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Item : MonoBehaviour
+public class Item
 {
     public ItemData Data;
     public string ItemName;
-
-    public Dictionary<Type, object> Stats = new();
-
-    private void AddStat<T, V>(T stat) where T : Stat<V>
+    public void Activate()
     {
-        Stats[typeof(T)] = stat;
-    }
-
-    private void Awake()
-    {
-        ItemName = Data.Name;
-        AddStat<Stat<float>, float>(new Stat<float>(5f));
+        Sanity.SanityEffect?.Invoke(new SanityEffectArgs(SanityEffectType.OverTime, -10.0f, 1.0f));
     }
 }

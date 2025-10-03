@@ -1,8 +1,12 @@
 using UnityEngine;
 
-public class ItemSlot : MonoBehaviour
+[System.Serializable]
+public class ItemSlot
 {
     public Item ItemHeld;
 
-
+    public ItemSlot()
+    {
+        ItemHeld = new Item();
+    }
 }
