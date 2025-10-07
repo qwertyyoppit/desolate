@@ -1,12 +1,13 @@
 using UnityEngine;
 
 [System.Serializable]
-public class ItemSlot
+public class ItemSlot : MonoBehaviour
 {
     public Item ItemHeld;
+    public static ItemData bata;
 
-    public ItemSlot()
+    private void Awake()
     {
-        ItemHeld = new Item();
+        ItemHeld = Item.CreateItem(null, transform);
     }
 }

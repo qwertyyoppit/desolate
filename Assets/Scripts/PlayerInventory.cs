@@ -7,12 +7,64 @@ public class PlayerInventory : MonoBehaviour
     [SerializeField] private ItemSlot[] hotbarSlots;
     [SerializeField] private ItemSlot[] inventorySlots;
 
+    private GameObject _playerInventoryObj;
+    private GameObject PlayerInventoryObj
+    {
+        get
+        {
+            if (!_playerInventoryObj)
+            {
+                _playerInventoryObj = new GameObject("Player Inventory");
+                _playerInventoryObj.transform.SetParent(Refs.player.transform);
+            }
+            return _playerInventoryObj;
+        }
+    }
+    private GameObject _hotbarObj;
+    private GameObject HotbarObj
+    {
+        get
+        {
+            if (!_hotbarObj)
+            {
+                _hotbarObj = new GameObject("Hotbar");
+                _hotbarObj.transform.SetParent(PlayerInventoryObj.transform);
+            }
+            return _hotbarObj;
+        }
+    }
+    private GameObject _inventoryObj;
+    private GameObject InventoryObj
+    {
+        get
+        {
+            if (!_inventoryObj)
+            {
+                _inventoryObj = new GameObject("Inventory");
+                _inventoryObj.transform.SetParent(PlayerInventoryObj.transform);
+            }
+            return _inventoryObj;
+        }
+    }
+
     public int selectedItem = 0;
 
     private void Awake()
     {
         hotbarSlots = new ItemSlot[hotbarCapacity];
         inventorySlots = new ItemSlot[inventoryCapacity];
+        for (int i = 0; i < hotbarCapacity; i++)
+        {
+            var slotObj = new GameObject("Hotbar Slot");
+            slotObj.transform.SetParent(HotbarObj.transform);
+            hotbarSlots[i] = slotObj.AddComponent<ItemSlot>();
+        }
+        for (int i = 0; i < inventoryCapacity; i++)
+        {
+            var slotObj = new GameObject("Inventory Slot");
+            slotObj.transform.SetParent(InventoryObj.transform);
+            inventorySlots[i] = slotObj.AddComponent<ItemSlot>();
+        }
     }
 
     private void Update()
