@@ -15,7 +15,7 @@ public class PlayerInventory : MonoBehaviour
             if (!_playerInventoryObj)
             {
                 _playerInventoryObj = new GameObject("Player Inventory");
-                _playerInventoryObj.transform.SetParent(Refs.player.transform);
+                _playerInventoryObj.transform.SetParent(Refs.Player.transform);
             }
             return _playerInventoryObj;
         }
@@ -77,6 +77,6 @@ public class PlayerInventory : MonoBehaviour
 
     private void ActivateItem()
     {
-        hotbarSlots[selectedItem].ItemHeld.Activate();
+        hotbarSlots[selectedItem].ItemHeld.Use();
     }
 }

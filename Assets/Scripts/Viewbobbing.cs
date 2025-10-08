@@ -7,7 +7,7 @@ public class Viewbobbing : MonoBehaviour
     private PlayerInput playerInput;
     private InputAction playerMovement;
     private CameraFirstPersonLook firstPersonCam;
-    private Player player;
+    private PlayerMovement player;
 
     [SerializeField] private float effectIntensity;
     [SerializeField] private float effectIntensityX;
@@ -28,7 +28,7 @@ public class Viewbobbing : MonoBehaviour
         {
             playerMovement = playerInput.actions["Move"];
         }
-        player = FindAnyObjectByType<Player>();
+        player = Refs.PlayerMovement;
         firstPersonCam = GetComponent<CameraFirstPersonLook>();
 
         firstPersonCam.CameraUpdated += Apply;
