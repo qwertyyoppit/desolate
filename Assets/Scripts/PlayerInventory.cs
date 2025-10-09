@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerInventory : MonoBehaviour
 {
@@ -6,6 +7,8 @@ public class PlayerInventory : MonoBehaviour
     [SerializeField] int inventoryCapacity;
     [SerializeField] private ItemSlot[] hotbarSlots;
     [SerializeField] private ItemSlot[] inventorySlots;
+
+    public ItemData ItemData;
 
     private GameObject _playerInventoryObj;
     private GameObject PlayerInventoryObj
@@ -65,6 +68,8 @@ public class PlayerInventory : MonoBehaviour
             slotObj.transform.SetParent(InventoryObj.transform);
             inventorySlots[i] = slotObj.AddComponent<ItemSlot>();
         }
+
+        Refs.PlayerInput.actions["Scroll"].performed += ScrollInput;
     }
 
     private void Update()
@@ -78,5 +83,22 @@ public class PlayerInventory : MonoBehaviour
     private void ActivateItem()
     {
         hotbarSlots[selectedItem].ItemHeld.Use();
+    }
+
+    private void ScrollInput(InputAction.CallbackContext context)
+    {
+        if (context.ReadValue<float>() < 0)
+            ScrollUpSelectedItem();
+        else
+            ScrollDownSelectedItem();
+    }
+
+    public void ScrollUpSelectedItem()
+    {
+        selectedItem = (selectedItem + hotbarCapacity + 1) % hotbarCapacity;
+    }
+    public void ScrollDownSelectedItem()
+    {
+        selectedItem = (selectedItem + hotbarCapacity - 1) % hotbarCapacity;
     }
 }

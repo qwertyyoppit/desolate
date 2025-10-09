@@ -2544,6 +2544,7 @@ MonoBehaviour:
   inventoryCapacity: 3
   hotbarSlots: []
   inventorySlots: []
+  ItemData: {fileID: 11400000, guid: b138f4226091c9c4fa7cd2358ea58a03, type: 2}
   selectedItem: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

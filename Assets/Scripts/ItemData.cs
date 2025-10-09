@@ -5,6 +5,6 @@ public class ItemData : ScriptableObject
 {
     public string Name = "";
     public string Description = "";
-    [SerializeField]
-    private GameObject ItemPrefab;
+    public float UseTime = 1.0f;
+    public GameObject ItemPrefab;
 }

@@ -8,6 +8,6 @@ public class ItemSlot : MonoBehaviour
 
     private void Awake()
     {
-        ItemHeld = Item.CreateItem(null, transform);
+        ItemHeld = Item.CreateItem(Refs.PlayerInventory.ItemData, transform);
     }
 }

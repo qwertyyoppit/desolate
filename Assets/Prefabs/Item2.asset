@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: circle
   Description: its not a cube
+  UseTime: 2
   ItemPrefab: {fileID: 9064348332642481884, guid: b0e2e509cbc96fe4dacb49cca3f330ab, type: 3}

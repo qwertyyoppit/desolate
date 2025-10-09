@@ -5,6 +5,7 @@ using UnityEngine;
 public class Item : MonoBehaviour
 {
     public ItemData Data;
+    public float UseTime;
     public string ItemName;
 
     public Action<ItemAttemptUsageArgs> attemptedUsage = delegate { };
@@ -19,6 +20,7 @@ public class Item : MonoBehaviour
         wasUsed = false;
         var attemptUsageArgs = new ItemAttemptUsageArgs();
         attemptedUsage?.Invoke(attemptUsageArgs);
+
         if (attemptUsageArgs.canceled) return;
 
         var usageStartedArgs = new ItemUsageStartedArgs();
@@ -27,11 +29,6 @@ public class Item : MonoBehaviour
         wasUsed = true;
 
         Sanity.SanityEffect?.Invoke(new SanityEffectArgs(SanityEffectType.OverTime, -10.0f, 1.0f));
-    }
-
-    private void Awake()
-    {
-        ItemName = Data ? Data.Name : "boo";
     }
 
     private void Update()
@@ -46,11 +43,13 @@ public class Item : MonoBehaviour
 
     public static Item CreateItem(ItemData data = null, Transform parent = null)
     {
-        var itemObj = new GameObject();
+        var itemObj = Instantiate(data.ItemPrefab);
         if (parent) itemObj.transform.SetParent(parent);
-        var item = itemObj.AddComponent<Item>();
+        var item = itemObj.GetComponent<Item>();
         item.Data = data;
-        itemObj.name = item.ItemName ?? "boo";
+        itemObj.name = item.Data.Name;
+        item.ItemName = item.Data.Name;
+        item.UseTime = item.Data.UseTime;
         return item;
     }
 }
