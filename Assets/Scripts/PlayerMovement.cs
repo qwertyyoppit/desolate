@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     public float walkAcceleration;
     public float walkMaxAcceleration;
     public float walkMaxSpeed;
+    public float sprintSpeedFactor;
     public float rotateSpeed = 120f;
 
     [SerializeField] private float jumpForce;
@@ -23,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float checkStart;
 
     [NonSerialized] public bool grounded;
+    [NonSerialized] public bool sprinting;
     [NonSerialized] public bool crouching;
     [NonSerialized] public bool jumping;
 
@@ -58,12 +60,13 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         movement = playerInput.actions["Move"].ReadValue<Vector2>().normalized;
+        sprinting = playerInput.actions["Sprint"].WasPerformedThisFrame();
         var moveDir = (cam.transform.forward * movement.y + cam.transform.right * movement.x);
-        moveDir.y = 0f;
+        moveDir.y = 0;
         moveDir.Normalize();
         var topVelocity = moveDir * (walkMaxSpeed * (crouching ? 0.6f : 1));//+ velocity of platform below
         var moveVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
-        var magnitude = walkAcceleration * Time.deltaTime;
+        var magnitude = walkAcceleration * (sprinting ? sprintSpeedFactor : 1) * Time.deltaTime;
         if (Vector3.Dot(moveVelocity, moveDir) < 0) magnitude *= 2;
         var force = Vector3.MoveTowards(moveVelocity, topVelocity, magnitude);
         

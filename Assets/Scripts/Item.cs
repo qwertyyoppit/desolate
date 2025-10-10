@@ -13,7 +13,6 @@ public class Item : MonoBehaviour
     public Action<ItemUsageStoppedArgs> usageStopped = delegate { };
 
     private bool wasUsed;
-    private bool usage;
 
     public void Use()
     {
@@ -29,12 +28,12 @@ public class Item : MonoBehaviour
         wasUsed = true;
 
         Sanity.SanityEffect?.Invoke(new SanityEffectArgs(SanityEffectType.OverTime, -10.0f, 1.0f));
+        print("explodistotion");
     }
 
     private void Update()
     {
-        usage = false || wasUsed;
-        if (!usage)
+        if (!wasUsed)
         {
             var usageStoppedArgs = new ItemUsageStoppedArgs();
             usageStopped?.Invoke(usageStoppedArgs);
