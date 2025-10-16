@@ -25,7 +25,7 @@ public class Shot : MonoBehaviour
     {
         transform.forward = Direction;
         shotRay = new Ray(transform.position, Direction);
-        var hit = Physics.Raycast(shotRay, out RaycastHit HitInfo, Speed * Time.deltaTime);
+        var hit = Physics.Raycast(shotRay, out HitInfo, Speed * Time.deltaTime);
         if (hit)
         {
             shotHit?.Invoke(this);
