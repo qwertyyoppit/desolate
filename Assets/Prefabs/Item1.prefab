@@ -132,7 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75911d5fae58a8e4bb7ade39d85d6d03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 5608214612067507355, guid: 81093cc912dc3b946be8a4cf28ce68fd, type: 3}
+  projectileData: {fileID: 11400000, guid: 8ae1eb456fecd3f4e97afebfb7fd12a2, type: 2}
 --- !u!114 &6372315924450503859
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,7 +145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43aec5869fa5dfe48aa4f529eb4626c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ProjectileAmount: 3
+  ProjectileAmount: 1
   minShotDelay: 0
   maxShotDelay: 0
 --- !u!114 &485791160307335583

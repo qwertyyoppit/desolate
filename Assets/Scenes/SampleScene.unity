@@ -2161,6 +2161,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1994693973
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1994693975}
+  - component: {fileID: 1994693974}
+  m_Layer: 0
+  m_Name: projectilemanager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1994693974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1994693973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba9cfe5f2a004a345b82ab033d683f14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1994693975
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1994693973}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.744239, y: 0.21344018, z: 1.761122}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2023010722
 GameObject:
   m_ObjectHideFlags: 0
@@ -2315,6 +2359,7 @@ GameObject:
   - component: {fileID: 2074351334}
   - component: {fileID: 2074351337}
   - component: {fileID: 2074351338}
+  - component: {fileID: 2074351339}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2552,6 +2597,19 @@ MonoBehaviour:
   inventorySlots: []
   ItemData: {fileID: 11400000, guid: b138f4226091c9c4fa7cd2358ea58a03, type: 2}
   selectedItem: 0
+--- !u!114 &2074351339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2074351326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 751c06c04cbdbaf44ae68928d1edddd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitColor: {r: 1, g: 0.36153623, b: 0, a: 1}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -2574,3 +2632,4 @@ SceneRoots:
   - {fileID: 678943378}
   - {fileID: 885143275}
   - {fileID: 1045091922}
+  - {fileID: 1994693975}

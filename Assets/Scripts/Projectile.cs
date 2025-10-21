@@ -9,14 +9,14 @@ public class Projectile : MonoBehaviour
 
     private Ray projectileRay;
 
-    public static Projectile CreateProjectile(Vector3 position, Vector3 direction, float speed, GameObject prefab = null)
+    public static Projectile CreateProjectile(Vector3 position, Vector3 direction, ProjectileData data)
     {
-        var shotObj = prefab ? Instantiate(prefab) : new GameObject();
+        var shotObj = data ? Instantiate(data.Prefab) : new GameObject();
         shotObj.transform.position = position;
         shotObj.transform.forward = direction;
-        var shotScript = shotObj.AddComponent<Projectile>();
-        shotScript.Speed = speed;
-        return shotScript;
+        var projectile = shotObj.TryGetComponent<Projectile>(out var projFound) ? projFound : shotObj.AddComponent<Projectile>();
+        projectile.Speed = data.Speed;
+        return projectile;
     }
 
     private void Update()
