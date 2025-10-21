@@ -14,8 +14,12 @@ public class PlayerMovement : MonoBehaviour
 
     public float walkAcceleration;
     public float walkMaxSpeed;
-    public float sprintSpeedFactor;
     public float rotateSpeed = 120f;
+    public float crouchSpeedFactor;
+    public float sprintSpeedFactor;
+
+    public float effectiveSpeedScale => (sprinting ? sprintSpeedFactor : 1) * (crouching ? crouchSpeedFactor : 1);
+    public float effectiveMaxSpeed => walkMaxSpeed * effectiveSpeedScale;
 
     public float jumpForce;
 
@@ -63,10 +67,9 @@ public class PlayerMovement : MonoBehaviour
         var moveDir = (cam.transform.forward * movement.y + cam.transform.right * movement.x);
         moveDir.y = 0;
         moveDir.Normalize();
-        var scale = (crouching ? 0.6f : 1) * (sprinting ? sprintSpeedFactor : 1);
-        var topVelocity = moveDir * (walkMaxSpeed * scale);//+ velocity of platform below
+        var topVelocity = moveDir * effectiveMaxSpeed;//+ velocity of platform below
         var moveVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
-        var magnitude = walkAcceleration * scale * Time.deltaTime;
+        var magnitude = walkAcceleration * effectiveSpeedScale * Time.deltaTime;
         if (Vector3.Dot(moveVelocity, moveDir) < 0) magnitude *= 2;
         var force = Vector3.MoveTowards(moveVelocity, topVelocity, magnitude);
         

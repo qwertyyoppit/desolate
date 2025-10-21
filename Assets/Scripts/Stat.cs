@@ -1,12 +1,21 @@
-[System.Serializable]
-public class Stat<T> : IStat
-{
-    public T value;
+using System;
 
-    public Stat(T value)
+[System.Serializable]
+public class Stat
+{
+    public string key;
+    public Type type;
+    public Stat()
     {
-        this.value = value;
+        type = typeof(float);
     }
 }
 
-public interface IStat { }
+public class StatValue<T>
+{
+    public T value;
+    public StatValue()
+    {
+
+    }
+}

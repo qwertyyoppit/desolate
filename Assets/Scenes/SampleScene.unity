@@ -2338,8 +2338,9 @@ MonoBehaviour:
   crouchCollider: {fileID: 2074351335}
   walkAcceleration: 15
   walkMaxSpeed: 5
-  sprintSpeedFactor: 1.3
   rotateSpeed: 40
+  crouchSpeedFactor: 0
+  sprintSpeedFactor: 1.3
   jumpForce: 5
   groundCheck: 0.01
   checkStart: 0.02

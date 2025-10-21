@@ -13,8 +13,10 @@ GameObject:
   - component: {fileID: 1391204577042100738}
   - component: {fileID: 1639230697302239893}
   - component: {fileID: 5862690794288936171}
-  - component: {fileID: 1849607691714436034}
-  - component: {fileID: 193687131996952141}
+  - component: {fileID: 4984115846367997150}
+  - component: {fileID: 6372315924450503859}
+  - component: {fileID: 485791160307335583}
+  - component: {fileID: 5529715594308638400}
   m_Layer: 0
   m_Name: Item1
   m_TagString: Untagged
@@ -118,7 +120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Cooldown: 0
---- !u!114 &1849607691714436034
+--- !u!114 &4984115846367997150
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,11 +129,40 @@ MonoBehaviour:
   m_GameObject: {fileID: 9064348332642481884}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fef333bc01018644cb1e1f1c59ef8e3a, type: 3}
+  m_Script: {fileID: 11500000, guid: 75911d5fae58a8e4bb7ade39d85d6d03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 5608214612067507355, guid: 81093cc912dc3b946be8a4cf28ce68fd, type: 3}
---- !u!114 &193687131996952141
+--- !u!114 &6372315924450503859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9064348332642481884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43aec5869fa5dfe48aa4f529eb4626c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ProjectileAmount: 3
+  minShotDelay: 0
+  maxShotDelay: 0
+--- !u!114 &485791160307335583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9064348332642481884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 360a90863d41f06419944cc590d179f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spreadX: 15
+  spreadY: 15
+--- !u!114 &5529715594308638400
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

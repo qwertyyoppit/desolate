@@ -3,14 +3,14 @@ using UnityEngine;
 [RequireComponent(typeof(Item))]
 public abstract class ItemOnProjectileHit : MonoBehaviour
 {
-    protected ItemProjectileUsage itemProjectile;
+    protected ItemProjectileManager itemProjectile;
 
     private void Start()
     {
-        itemProjectile = GetComponent<ItemProjectileUsage>();
+        itemProjectile = GetComponent<ItemProjectileManager>();
 
         itemProjectile.projectileHit += OnHit;
     }
 
-    protected abstract void OnHit(Shot shot);
+    protected abstract void OnHit(Projectile shot);
 }

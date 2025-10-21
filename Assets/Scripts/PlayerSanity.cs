@@ -24,7 +24,7 @@ public class PlayerSanity : MonoBehaviour
     {
         foreach (var effect in sanityDrainEffects.ToArray())
         {
-            sanity = Mathf.Lerp(sanity, sanity - effect.Amount, Mathf.Min(Time.deltaTime, effect.Duration));
+            sanity = Mathf.Lerp(sanity, sanity + effect.Amount, Mathf.Min(Time.deltaTime, effect.Duration));
             effect.Duration -= Time.deltaTime;
             if (effect.Duration <= 0)
             {
@@ -38,7 +38,7 @@ public class PlayerSanity : MonoBehaviour
         switch (args.EffectType)
         {
             case SanityEffectType.Instant:
-                sanity -= args.SanityAmount;
+                sanity += args.SanityAmount;
                 return;
             case SanityEffectType.OverTime:
                 sanityDrainEffects.Add(new SanityOvertimeEffect(args.SanityAmount, args.Duration));
