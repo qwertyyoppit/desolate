@@ -33,7 +33,6 @@ public class ItemProjectileManager : MonoBehaviour
 
     private void FireShot(ItemUsageStartedArgs args)
     {
-        print((Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2f, Screen.height / 2f, 2f)) - transform.position).normalized);
         FireProjectile();
     }
 

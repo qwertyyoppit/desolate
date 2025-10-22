@@ -5,6 +5,8 @@ public class Projectile : MonoBehaviour
 {
     public Action<Projectile> projectileHit = delegate { };
     public float Speed;
+    public float MaxLifetime = 100f;
+    public float Lifetime;
     public RaycastHit HitInfo;
 
     private Ray projectileRay;
@@ -21,6 +23,12 @@ public class Projectile : MonoBehaviour
 
     private void Update()
     {
+        Lifetime += Time.deltaTime;
+        if (Lifetime > MaxLifetime) 
+        { 
+            Destroy(this);
+            return;
+        }
         projectileRay = new Ray(transform.position, transform.forward);
         var hit = Physics.Raycast(projectileRay, out HitInfo, Speed * Time.deltaTime);
         if (hit)

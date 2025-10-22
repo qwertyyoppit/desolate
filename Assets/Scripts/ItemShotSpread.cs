@@ -26,6 +26,6 @@ public class ItemShotSpread : MonoBehaviour
     private void OnProjectileFired(Projectile shot)
     {
         var spreadAmount = new Vector3(spreadY * Random.value, spreadX * Random.value, 0);
-        shot.transform.eulerAngles += spreadAmount;
+        shot.transform.localEulerAngles += spreadAmount;
     }
 }

@@ -69,20 +69,23 @@ public class PlayerInventory : MonoBehaviour
             inventorySlots[i] = slotObj.AddComponent<ItemSlot>();
         }
 
-        Refs.PlayerInput.actions["Scroll"].performed += ScrollInput;
+        Refs.PlayerInput.actions["Primary"].started += PrimaryInput;
+        Refs.PlayerInput.actions["Secondary"].started += SecondaryInput;
+        Refs.PlayerInput.actions["Scroll"].started += ScrollInput;
     }
 
-    private void Update()
+    private void PrimaryInput(InputAction.CallbackContext context)
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            ActivateItem();
-        }
+        UseActivationItem(ItemActivationTypes.Primary);
+    }
+    private void SecondaryInput(InputAction.CallbackContext context)
+    {
+        UseActivationItem(ItemActivationTypes.Secondary);
     }
 
-    private void ActivateItem()
+    private void UseActivationItem(ItemActivationTypes activationType = ItemActivationTypes.Primary)
     {
-        hotbarSlots[selectedItem].ItemHeld.Use();
+        hotbarSlots[selectedItem].ItemHeld.Use(activationType);
     }
 
     private void ScrollInput(InputAction.CallbackContext context)

@@ -28,7 +28,7 @@ public class ItemProjectileCount : MonoBehaviour
     {
         if (delay > 0)
             delay -= Time.deltaTime;
-        if (currentShotsRemaining > 0 && delay <= 0)
+        if (delay <= 0 && currentShotsRemaining > 0)
         {
             itemProjectileManager.FireProjectile();
         }
@@ -36,7 +36,7 @@ public class ItemProjectileCount : MonoBehaviour
 
     private void OnAttemptUsage(ItemAttemptUsageArgs args)
     {
-        if (currentShotsRemaining > 0 || delay > 0)
+        if (delay > 0 || currentShotsRemaining > 0)
         {
             args.canceled = true;
         }
@@ -44,7 +44,7 @@ public class ItemProjectileCount : MonoBehaviour
 
     private void OnUsage(ItemUsageStartedArgs args)
     {
-        currentShotsRemaining = ProjectileAmount;
+        currentShotsRemaining = ProjectileAmount - 1;
         delay = Random.Range(minShotDelay, maxShotDelay);
     }
 

@@ -5,6 +5,7 @@ using UnityEngine;
 public class Item : MonoBehaviour
 {
     public ItemData Data;
+    public bool Autouse;
     public float UseTime;
     public string ItemName;
 
@@ -14,21 +15,20 @@ public class Item : MonoBehaviour
 
     private bool wasUsed;
 
-    public void Use()
+    public void Use(ItemActivationTypes activationType = ItemActivationTypes.Primary)
     {
         wasUsed = false;
-        var attemptUsageArgs = new ItemAttemptUsageArgs();
+        var attemptUsageArgs = new ItemAttemptUsageArgs() { activationType = activationType };
         attemptedUsage?.Invoke(attemptUsageArgs);
 
         if (attemptUsageArgs.canceled) return;
 
-        var usageStartedArgs = new ItemUsageStartedArgs();
+        var usageStartedArgs = new ItemUsageStartedArgs() { activationType = activationType };
         usageStarted?.Invoke(usageStartedArgs);
 
         wasUsed = true;
 
-        Sanity.SanityEffect?.Invoke(new SanityEffectArgs(SanityEffectType.OverTime, -10.0f, 1.0f));
-        print("explodistotion");
+        //explodistosion
     }
 
     private void Update()
@@ -51,4 +51,11 @@ public class Item : MonoBehaviour
         item.UseTime = item.Data.UseTime;
         return item;
     }
+}
+
+public enum ItemActivationTypes
+{
+    Primary,
+    Secondary,
+    Tertiary
 }

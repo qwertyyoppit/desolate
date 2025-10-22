@@ -38,8 +38,13 @@ public class PlayerLerpColorOfHit : MonoBehaviour
 
     private void OnHit(Projectile projectile)
     {
-        if (projectile.HitInfo.collider.TryGetComponent<MeshRenderer>(out var renderer) && renderer.material && !trackedMaterials.ContainsKey(renderer.material))
+        if (projectile.HitInfo.collider.TryGetComponent<MeshRenderer>(out var renderer) && renderer.material)
         {
+            if (trackedMaterials.TryGetValue(renderer.material, out var track))
+            {
+                track.amount = 1.0f;
+                return;
+            }
             trackedMaterials.Add(renderer.material, new MaterialTrack() { amount = 1.0f, baseColor = renderer.material.color });
         }    
     }
