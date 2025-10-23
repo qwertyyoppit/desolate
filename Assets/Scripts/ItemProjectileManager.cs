@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Item))]
@@ -7,6 +8,8 @@ public class ItemProjectileManager : MonoBehaviour
     [SerializeField] private ProjectileData projectileData;
     private Item item;
     private PlayerProjectileManager playerProjectileManager;
+
+    public List<Projectile> projectiles = new();
 
     public Action<Projectile> projectileFired = delegate { };
     public Action<Projectile> projectileHit = delegate { };
@@ -23,30 +26,36 @@ public class ItemProjectileManager : MonoBehaviour
 
     private void OnEnable()
     {
-        item.usageStarted += FireShot;
+        item.usageStarted += FireProjectile;
     }
 
     private void OnDisable()
     {
-        item.usageStarted -= FireShot;
+        item.usageStarted -= FireProjectile;
     }
 
-    private void FireShot(ItemUsageStartedArgs args)
+    private void FireProjectile(ItemUsageStartedArgs args)
     {
-        FireProjectile();
+        if (args.activationType == ItemActivationTypes.Primary)
+            FireProjectile();
     }
 
     public void FireProjectile()
     {
-        var shot = Projectile.CreateProjectile(transform.position, (Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2f, Screen.height / 2f, 2f)) - transform.position).normalized, projectileData);
-        projectileFired?.Invoke(shot);
-        playerProjectileManager.projectileFired?.Invoke(shot);
-        shot.projectileHit += OnShotHit;
+        var projectile = playerProjectileManager.FireProjectile(transform.position, (Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2f, Screen.height / 2f, 2f)) - transform.position).normalized, projectileData);
+        projectiles.Add(projectile);
+        projectileFired?.Invoke(projectile);
+        projectile.projectileHit += OnProjectileHit;
+        projectile.projectileDestroyed += OnProjectileDestroyed;
     }
 
-    private void OnShotHit(Projectile shot)
+    private void OnProjectileHit(Projectile projectile)
     {
-        projectileHit?.Invoke(shot);
-        playerProjectileManager.projectileHit?.Invoke(shot);
+        projectileHit?.Invoke(projectile);
+    }
+
+    private void OnProjectileDestroyed(Projectile projectile)
+    {
+        projectiles.Remove(projectile);
     }
 }

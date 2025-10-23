@@ -48,5 +48,13 @@ public class PlayerLerpColorOfHit : MonoBehaviour
             trackedMaterials.Add(renderer.material, new MaterialTrack() { amount = 1.0f, baseColor = renderer.material.color });
         }    
     }
+
+    private void OnDisable()
+    {
+        foreach (var tracked in trackedMaterials)
+        {
+            tracked.Key.color = tracked.Value.baseColor;
+        }
+    }
 }
 

@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 4984115846367997150}
   - component: {fileID: 6372315924450503859}
   - component: {fileID: 485791160307335583}
+  - component: {fileID: 3218734542946838613}
   m_Layer: 0
   m_Name: Item1
   m_TagString: Untagged
@@ -104,6 +105,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Data: {fileID: 11400000, guid: b138f4226091c9c4fa7cd2358ea58a03, type: 2}
+  Autouse: 0
   UseTime: 0
   ItemName: 
 --- !u!114 &5862690794288936171
@@ -132,6 +134,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectileData: {fileID: 11400000, guid: 8ae1eb456fecd3f4e97afebfb7fd12a2, type: 2}
+  projectiles: []
 --- !u!114 &6372315924450503859
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,3 +164,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spreadX: 15
   spreadY: 15
+--- !u!114 &3218734542946838613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9064348332642481884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac0637283d75c3f439c02e30a2666a36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reverseSpeed: 5
+  activationType: 1

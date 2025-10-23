@@ -54,4 +54,17 @@ public class Refs : MonoBehaviour
             return _playerInventory;
         }
     }
+
+    private static PlayerProjectileManager _playerProjectileManager;
+    public static PlayerProjectileManager PlayerProjectileManager
+    {
+        get
+        {
+            if (!_playerProjectileManager)
+            {
+                _playerProjectileManager = FindAnyObjectByType<PlayerProjectileManager>();
+            }
+            return _playerProjectileManager;
+        }
+    }
 }

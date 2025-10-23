@@ -4,6 +4,8 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     public Action<Projectile> projectileHit = delegate { };
+    public Action<Projectile> projectileDestroyed = delegate { };
+    public ProjectileData Data;
     public float Speed;
     public float MaxLifetime = 100f;
     public float Lifetime;
@@ -17,6 +19,7 @@ public class Projectile : MonoBehaviour
         shotObj.transform.position = position;
         shotObj.transform.forward = direction;
         var projectile = shotObj.TryGetComponent<Projectile>(out var projFound) ? projFound : shotObj.AddComponent<Projectile>();
+        projectile.Data = data;
         projectile.Speed = data.Speed;
         return projectile;
     }
@@ -45,5 +48,10 @@ public class Projectile : MonoBehaviour
     {
         projectileHit?.Invoke(this);
         Destroy(gameObject);
+    }
+
+    private void OnDestroy()
+    {
+        projectileDestroyed?.Invoke(this);
     }
 }
