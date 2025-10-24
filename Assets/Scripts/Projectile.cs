@@ -29,7 +29,7 @@ public class Projectile : MonoBehaviour
         Lifetime += Time.deltaTime;
         if (Lifetime > MaxLifetime) 
         { 
-            Destroy(this);
+            Destroy(gameObject);
             return;
         }
         projectileRay = new Ray(transform.position, transform.forward);

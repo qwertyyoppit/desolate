@@ -61,13 +61,17 @@ public class PlayerInventory : MonoBehaviour
             var slotObj = new GameObject("Hotbar Slot");
             slotObj.transform.SetParent(HotbarObj.transform);
             hotbarSlots[i] = slotObj.AddComponent<ItemSlot>();
+            slotObj.SetActive(false);
         }
         for (int i = 0; i < inventoryCapacity; i++)
         {
             var slotObj = new GameObject("Inventory Slot");
             slotObj.transform.SetParent(InventoryObj.transform);
             inventorySlots[i] = slotObj.AddComponent<ItemSlot>();
+            slotObj.SetActive(false);
         }
+
+        SetSelectedItem();
 
         Refs.PlayerInput.actions["Primary"].started += PrimaryInput;
         Refs.PlayerInput.actions["Secondary"].started += SecondaryInput;
@@ -98,10 +102,17 @@ public class PlayerInventory : MonoBehaviour
 
     public void ScrollUpSelectedItem()
     {
-        selectedItem = (selectedItem + hotbarCapacity + 1) % hotbarCapacity;
+        SetSelectedItem(selectedItem + 1);
     }
     public void ScrollDownSelectedItem()
     {
-        selectedItem = (selectedItem + hotbarCapacity - 1) % hotbarCapacity;
+        SetSelectedItem(selectedItem - 1);
+    }
+
+    public void SetSelectedItem(int slot = 0)
+    {
+        hotbarSlots[selectedItem].gameObject.SetActive(false);
+        selectedItem = (slot + hotbarCapacity) % hotbarCapacity;
+        hotbarSlots[selectedItem].gameObject.SetActive(true);
     }
 }

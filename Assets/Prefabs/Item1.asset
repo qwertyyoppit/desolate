@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: cube
   Description: its a cube
-  UseTime: 1
+  UseTime: 0.3
   ItemPrefab: {fileID: 9064348332642481884, guid: 129aed48d54f13743ae26e2a059ee2c0, type: 3}

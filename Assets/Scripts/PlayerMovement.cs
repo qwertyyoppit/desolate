@@ -102,7 +102,6 @@ public class PlayerMovement : MonoBehaviour
     private void StopJump()
     {
         if (!jumping) return;
-        print(jumping);
         jumping = false;
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, Mathf.Min(rb.linearVelocity.y, rb.linearVelocity.y * 0.1f), rb.linearVelocity.z);
     }

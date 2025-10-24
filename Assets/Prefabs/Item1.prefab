@@ -176,5 +176,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0637283d75c3f439c02e30a2666a36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reverseSpeed: 5
+  reverseSpeed: 1
   activationType: 1
