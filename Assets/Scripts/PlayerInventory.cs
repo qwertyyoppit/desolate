@@ -76,18 +76,41 @@ public class PlayerInventory : MonoBehaviour
         Refs.PlayerInput.actions["Primary"].started += PrimaryInput;
         Refs.PlayerInput.actions["Secondary"].started += SecondaryInput;
         Refs.PlayerInput.actions["Scroll"].started += ScrollInput;
+        Refs.PlayerInput.actions["Primary"].performed += PrimaryInput;
+        Refs.PlayerInput.actions["Secondary"].performed += SecondaryInput;
+        Refs.PlayerInput.actions["Primary"].canceled+= PrimaryInput;
+        Refs.PlayerInput.actions["Secondary"].canceled+= SecondaryInput;
     }
 
     private void PrimaryInput(InputAction.CallbackContext context)
     {
-        UseActivationItem(ItemActivationTypes.Primary);
+        switch (context.phase)
+        {
+            case InputActionPhase.Started: StartUseItem(ItemActivationTypes.Primary); break;
+            case InputActionPhase.Performed: UseItem(ItemActivationTypes.Primary); break;
+            case InputActionPhase.Canceled: StopUseItem(ItemActivationTypes.Primary); break;
+        };
     }
     private void SecondaryInput(InputAction.CallbackContext context)
     {
-        UseActivationItem(ItemActivationTypes.Secondary);
+        switch (context.phase)
+        {
+            case InputActionPhase.Started: StartUseItem(ItemActivationTypes.Secondary); break;
+            case InputActionPhase.Performed: UseItem(ItemActivationTypes.Secondary); break;
+            case InputActionPhase.Canceled: StopUseItem(ItemActivationTypes.Secondary); break;
+        };
     }
 
-    private void UseActivationItem(ItemActivationTypes activationType = ItemActivationTypes.Primary)
+    private void StartUseItem(ItemActivationTypes activationType = ItemActivationTypes.Primary)
+    {
+        hotbarSlots[selectedItem].ItemHeld.Use(activationType);
+    }
+
+    private void UseItem(ItemActivationTypes activationType = ItemActivationTypes.Primary)
+    {
+        hotbarSlots[selectedItem].ItemHeld.Use(activationType);
+    }
+    private void StopUseItem(ItemActivationTypes activationType = ItemActivationTypes.Primary)
     {
         hotbarSlots[selectedItem].ItemHeld.Use(activationType);
     }
