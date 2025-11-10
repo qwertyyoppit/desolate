@@ -1,21 +1,6 @@
-using System;
+using UnityEngine;
 
-[System.Serializable]
-public class Stat
+public class Stat : ScriptableObject
 {
-    public string key;
-    public Type type;
-    public Stat()
-    {
-        type = typeof(float);
-    }
-}
-
-public class StatValue<T>
-{
-    public T value;
-    public StatValue()
-    {
-
-    }
+    public MonoBehaviour instantiatedStat;
 }
