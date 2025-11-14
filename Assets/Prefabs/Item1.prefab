@@ -147,7 +147,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43aec5869fa5dfe48aa4f529eb4626c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ProjectileAmount: 1
+  ProjectileAmount: 3
   minShotDelay: 0
   maxShotDelay: 0
 --- !u!114 &485791160307335583
@@ -162,8 +162,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 360a90863d41f06419944cc590d179f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spreadX: 15
-  spreadY: 15
+  spreadX: 7
+  spreadY: 7
 --- !u!114 &3218734542946838613
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83d3741246ab4e7438844b2ded4c28fd, type: 3}
   m_Name: bullet!!!
   m_EditorClassIdentifier: 
-  Speed: 15
+  Speed: 40
+  MaxLifetime: 100
   Prefab: {fileID: 5608214612067507355, guid: 81093cc912dc3b946be8a4cf28ce68fd, type: 3}
