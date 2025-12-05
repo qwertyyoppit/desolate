@@ -74,7 +74,9 @@ public class PlayerMovement : MonoBehaviour
         var force = Vector3.MoveTowards(moveVelocity, topVelocity, magnitude);
         
         rb.linearVelocity = new Vector3(force.x, rb.linearVelocity.y, force.z);
-        transform.forward = Vector3.RotateTowards(transform.forward, moveDir, rotateSpeed * Time.deltaTime, 0.0f);
+        var lookDir = cam.transform.forward;
+        lookDir.y = transform.forward.y;
+        transform.forward = Vector3.RotateTowards(transform.forward, lookDir, rotateSpeed * Time.deltaTime, 0.0f);
     }
 
     private void StartCrouch()

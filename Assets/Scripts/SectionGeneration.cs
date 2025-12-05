@@ -140,8 +140,6 @@ public class SectionGeneration : MonoBehaviour
             
             previousSegment = segment;
         }
-
-        GameObject.Find("navgenerate").GetComponent<NavMeshSurface>().BuildNavMesh();
     }
 
     private bool CompareEntrySegmentElevation(PathSegment segment, EntryNode entry)

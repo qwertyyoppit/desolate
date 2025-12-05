@@ -3,12 +3,14 @@ using UnityEngine.InputSystem;
 
 public class PlayerInventory : MonoBehaviour
 {
-    [SerializeField] int hotbarCapacity;
-    [SerializeField] int inventoryCapacity;
-    [SerializeField] private ItemSlot[] hotbarSlots;
-    [SerializeField] private ItemSlot[] inventorySlots;
+    public int hotbarCapacity;
+    public int inventoryCapacity;
+    public ItemSlot[] hotbarSlots;
+    public ItemSlot[] inventorySlots;
 
     public ItemData ItemData;
+
+    public Item HeldItem => hotbarSlots[selectedItem].ItemHeld;
 
     private GameObject _playerInventoryObj;
     private GameObject PlayerInventoryObj

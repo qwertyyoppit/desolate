@@ -9,6 +9,8 @@ public class Item : MonoBehaviour
     public float UseTime;
     public string ItemName;
 
+    public Transform GripPosition;
+
     public Action<ItemAttemptUsageArgs> attemptedUsage = delegate { };
     public Action<ItemUsageStartedArgs> usageStarted = delegate { };
     public Action<ItemUsageStoppedArgs> usageStopped = delegate { };
