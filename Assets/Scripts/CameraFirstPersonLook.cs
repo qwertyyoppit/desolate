@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 
 public class CameraFirstPersonLook : MonoBehaviour
 {
+    private Camera cam;
+
     private PlayerInventory playerInventory;
 
     public Transform player;
@@ -19,6 +21,11 @@ public class CameraFirstPersonLook : MonoBehaviour
 
     public Action CameraUpdated = delegate { };
 
+    private void Awake()
+    {
+        cam = GetComponent<Camera>();
+    }
+
     private void Start()
     {
         playerInventory = Refs.PlayerInventory;
@@ -27,20 +34,21 @@ public class CameraFirstPersonLook : MonoBehaviour
     private void LateUpdate()
     {
         transform.position = player.position;
-        if (Cursor.lockState == CursorLockMode.None)
-        {
-            CameraUpdated?.Invoke();
-            return;
-        }
-        var look = Mouse.current.delta.value * (lookSpeed * Time.deltaTime);
 
-        pitch -= look.y;
-        yaw += look.x;
-        pitch = Mathf.Clamp(pitch, -89.5f, 89.5f);
-        transform.rotation = Quaternion.Euler(pitch, yaw, 0.0f);
+        if (Cursor.lockState == CursorLockMode.Locked)
+        {
+            var look = Mouse.current.delta.value * (lookSpeed * Time.deltaTime);
+
+            pitch -= look.y;
+            yaw += look.x;
+            pitch = Mathf.Clamp(pitch, -89.5f, 89.5f);
+            transform.rotation = Quaternion.Euler(pitch, yaw, 0.0f);
+        }
+
+        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, Refs.PlayerMovement.sprinting ? 105f : 90f, Time.deltaTime * 3f);
 
         var item = playerInventory.HeldItem;
-        item.transform.eulerAngles = transform.eulerAngles + item.GripPosition.eulerAngles - item.transform.eulerAngles;
+        item.transform.eulerAngles = transform.eulerAngles + itemRotationOffset + item.GripPosition.localEulerAngles;
         item.transform.position = transform.position;
         var offset = itemOffset + item.GripPosition.position - item.transform.position;
         item.transform.position += offset.x * transform.right + offset.y * transform.up + offset.z * transform.forward;

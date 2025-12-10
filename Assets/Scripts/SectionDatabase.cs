@@ -23,6 +23,7 @@ public class SectionDatabase : ScriptableObject
 
         foreach (var obj in sections)
         {
+            if (!obj) continue;
             var section = obj.GetComponent<Section>();
             if (section)
                 temp.Add(section);

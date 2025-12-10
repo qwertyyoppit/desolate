@@ -114,7 +114,7 @@ public class PlayerInventory : MonoBehaviour
     }
     private void StopUseItem(ItemActivationTypes activationType = ItemActivationTypes.Primary)
     {
-        hotbarSlots[selectedItem].ItemHeld.Use(activationType);
+        //hotbarSlots[selectedItem].ItemHeld.Use(activationType);
     }
 
     private void ScrollInput(InputAction.CallbackContext context)

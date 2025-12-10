@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour
 
     private Transform player;
 
-    [SerializeField] private Transform[] routePoints;
+    public Transform[] routePoints;
     [SerializeField] private float completeProximity = 0.5f;
     [SerializeField] private bool backwards;
     [SerializeField] private bool pingPong;
@@ -17,12 +17,18 @@ public class Enemy : MonoBehaviour
     public float viewDistance = 10f;
     [Range(0f, 360f)] public float fov = 90f;
     public float noticeTime = 1f;
+    public float huntTime = 10f;
+
+    public float PatrolSpeed = 3.5f;
+    public float PursueSpeed = 5f;
 
     public float noticeTimer;
+    public float huntTimer;
 
     private int currentPoint;
 
     private bool seesPlayer;
+    private Vector3 playerLastSeen;
 
     public DetectionState state;
 
@@ -43,31 +49,14 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
+        CheckVision();
+
         switch (state)
         {
             case DetectionState.Patrolling: Patrol(); break;
             case DetectionState.Hunting: Hunt(); break;
             case DetectionState.Pursuing: Pursue(); break;
         };
-
-        CheckVision();
-
-        if (seesPlayer)
-        {
-            noticeTimer = Mathf.Min(noticeTimer + Time.deltaTime, noticeTime);
-            if (noticeTimer >= noticeTime)
-            {
-                SetPursuing();
-            }
-        }
-        else
-        {
-            noticeTimer = Mathf.Max(0.0f, noticeTimer - Time.deltaTime);
-            if (noticeTimer == 0.0f)
-            {
-                SetPatrolling();
-            }
-        }
 
         agent.destination = goal;
     }
@@ -76,18 +65,35 @@ public class Enemy : MonoBehaviour
     {
         seesPlayer = false;
 
-        if (Vector3.Angle(player.position.normalized, visionPoint.forward) > fov) return;
+        if (Vector3.Angle(player.position - transform.position, visionPoint.forward) > fov) return;
         if (Vector3.Distance(player.position, visionPoint.position) > viewDistance) return;
 
-        var playerRay = new Ray(player.position, player.position - visionPoint.position);
-        if (!Physics.Raycast(playerRay, LayerMask.GetMask("Terrain")))
+        var playerRay = new Ray(visionPoint.position, player.position - visionPoint.position);
+        if (Physics.Raycast(playerRay, out var info, viewDistance))
         {
-            seesPlayer = true;
+            if (info.collider.gameObject == player.gameObject)
+            {
+                seesPlayer = true;
+                playerLastSeen = player.position;
+            }
         }
     }
 
     private void Patrol()
     {
+        if (seesPlayer)
+        {
+            noticeTimer += Time.deltaTime;
+            if (noticeTimer > noticeTime)
+            {
+                SetPursuing();
+                return;
+            }
+        }
+        else
+        {
+            noticeTimer = Mathf.Max(noticeTimer - Time.deltaTime, 0);
+        }
         var pointPos = routePoints[currentPoint].position;
         goal = GroundPoint(pointPos);
 
@@ -99,12 +105,26 @@ public class Enemy : MonoBehaviour
 
     private void Hunt()
     {
-
+        // set when seen player but not pursuing, would go to where it saw player.
+        // if no see player when get to lastseen, we go to patrolling
+        // poopen farten shitten i stayed up so late :(
     }
 
     private void Pursue()
     {
-        goal = player.position;
+        huntTimer -= Time.deltaTime;
+        if (huntTimer  <= 0)
+        {
+            SetPatrolling();
+            return;
+        }
+        if (seesPlayer)
+        {
+            huntTimer = huntTime;
+            goal = player.position;
+            return;
+        }
+        goal = playerLastSeen;
     }
 
     private void NextPoint()
@@ -135,6 +155,7 @@ public class Enemy : MonoBehaviour
         state = DetectionState.Patrolling;
         noticeTimer = 0.0f;
         seesPlayer = false;
+        agent.speed = PatrolSpeed;
     }
 
     public void SetHunting()
@@ -146,9 +167,11 @@ public class Enemy : MonoBehaviour
     public void SetPursuing()
     {
         state = DetectionState.Pursuing;
+        agent.speed = PursueSpeed;
+        huntTimer = huntTime;
     }
 
-    private Vector3 GroundPoint(Vector3 point)
+    public Vector3 GroundPoint(Vector3 point)
     {
         point.y += 0.1f;
         Physics.Raycast(new Ray(point, Vector3.down), out RaycastHit groundHit, 10000f, LayerMask.GetMask("Terrain"));
