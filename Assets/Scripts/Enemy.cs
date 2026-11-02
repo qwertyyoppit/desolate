@@ -107,7 +107,7 @@ public class Enemy : MonoBehaviour
     {
         // set when seen player but not pursuing, would go to where it saw player.
         // if no see player when get to lastseen, we go to patrolling
-        // poopen farten shitten i stayed up so late :(
+        // poopen farten NOSWEARWORDS i stayed up so late :(
     }
 
     private void Pursue()
